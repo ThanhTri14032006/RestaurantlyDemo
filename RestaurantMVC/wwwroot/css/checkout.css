@@ -1,0 +1,74 @@
+/* CSS riêng cho trang Checkout */
+.checkout-page {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+.checkout-page .card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(112, 112, 112, 0.25);
+}
+
+.checkout-page .card-header {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
+}
+
+.checkout-page .card-header h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkout-page .border-bottom {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.checkout-page .form-label {
+  font-weight: 600;
+}
+
+.checkout-page .form-control {
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.checkout-page .form-control:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.2);
+}
+
+.checkout-page .btn-success.btn-lg {
+  border-radius: 10px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  border: none;
+}
+
+.checkout-page .btn-success.btn-lg:hover {
+  filter: brightness(1.05);
+}
+
+.checkout-page .btn-secondary {
+  border-radius: 10px;
+}
+
+/* Tổng cộng */
+.checkout-page .text-primary {
+  color: #4f46e5 !important;
+}
+
+/* Empty cart state */
+.checkout-page .text-center .fas.fa-shopping-cart {
+  color: #94a3b8 !important;
+}
+
+.checkout-page .text-muted {
+  color: #64748b !important;
+}
+
+/* Responsive tweaks */
+@media (max-width: 991px) {
+  .checkout-page .card-header h4 { font-size: 1.15rem; }
+}

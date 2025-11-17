@@ -1,0 +1,29 @@
+/* CSS dùng chung cho các trang thuộc controller Booking */
+
+/* Nền cho toàn bộ trang Booking: sáng, ấm áp theo theme nhà hàng */
+body.booking-page {
+  background: linear-gradient(135deg, var(--light-color) 0%, #f3eee9 100%);
+  background-attachment: fixed;
+}
+
+/* Container trong suốt để nền hiện rõ nhưng nội dung nằm trong card sáng */
+body.booking-page .container {
+  background: transparent;
+}
+
+/* Card sáng, dễ đọc, đồng bộ màu chữ theo theme */
+body.booking-page .card {
+  background-color: #ffffff;
+  color: var(--dark-color);
+  border-color: #e9ecef;
+}
+
+/* Header gradient theo màu chủ đạo */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+/* Liên kết hover theo màu chủ đạo */
+body.booking-page a:hover {
+  color: var(--primary-color);
+}

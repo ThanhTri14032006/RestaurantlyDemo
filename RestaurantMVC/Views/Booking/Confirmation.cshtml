@@ -1,0 +1,200 @@
+@model RestaurantMVC.Models.Booking
+@{
+    ViewData["Title"] = "Xác nhận đặt bàn";
+
+    string statusLabel = Model.Status switch
+    {
+        RestaurantMVC.Models.BookingStatus.Pending => "Chờ xác nhận",
+        RestaurantMVC.Models.BookingStatus.Confirmed => "Đã xác nhận",
+        RestaurantMVC.Models.BookingStatus.Completed => "Đã hoàn thành",
+        RestaurantMVC.Models.BookingStatus.Cancelled => "Đã hủy",
+        _ => Model.Status.ToString()
+    };
+
+    string statusClass = Model.Status switch
+    {
+        RestaurantMVC.Models.BookingStatus.Pending => "pending",
+        RestaurantMVC.Models.BookingStatus.Confirmed => "confirmed",
+        RestaurantMVC.Models.BookingStatus.Completed => "completed",
+        RestaurantMVC.Models.BookingStatus.Cancelled => "cancelled",
+        _ => "pending"
+    };
+
+    bool isConfirmed = Model.Status == RestaurantMVC.Models.BookingStatus.Confirmed || Model.Status == RestaurantMVC.Models.BookingStatus.Completed;
+    bool isCompleted = Model.Status == RestaurantMVC.Models.BookingStatus.Completed;
+    bool isCancelled = Model.Status == RestaurantMVC.Models.BookingStatus.Cancelled;
+}
+
+<div class="booking-confirmation-page">
+    <div class="container">
+        <section class="confirmation-content">
+            <div class="confirmation-grid">
+                <div class="primary-column">
+                    <div class="card-block summary-card">
+                        <div class="summary-header">
+                            <div class="summary-title">
+                                <h2>Thông tin đặt bàn</h2>
+                                <p>@(isCancelled
+                                        ? "Đặt bàn đã được cập nhật. Kiểm tra lại thông tin bên dưới."
+                                        : "Cảm ơn bạn đã chọn Restaurantly. Vui lòng đến đúng giờ để được phục vụ tốt nhất.")</p>
+                            </div>
+                            <div class="summary-meta">
+                                <span class="code-pill">Mã <strong>#@Model.Id.ToString().PadLeft(6, '0')</strong></span>
+                                <span class="status-badge @statusClass">@statusLabel</span>
+                                <span class="hero-time"><i class="fas fa-calendar-day me-2"></i>@Model.BookingDate.ToString("dd/MM/yyyy") · @Model.BookingTime.ToString("HH:mm")</span>
+                            </div>
+                        </div>
+
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <span class="label">Khách hàng</span>
+                                <span class="value">@Model.CustomerName</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Số điện thoại</span>
+                                <span class="value">@Model.Phone</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Email</span>
+                                <span class="value">@Model.Email</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Số khách</span>
+                                <span class="value">@Model.PartySize người</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Ngày đến</span>
+                                <span class="value">@Model.BookingDate.ToString("dd/MM/yyyy")</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Thời gian</span>
+                                <span class="value">@Model.BookingTime.ToString("HH:mm")</span>
+                            </div>
+                        </div>
+
+                        <div class="detail-footer">
+                            <div>
+                                <span class="label">Đặt lúc</span>
+                                <span class="value">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</span>
+                            </div>
+                            <div>
+                                <span class="label">Trạng thái hiện tại</span>
+                                <span class="status-chip @statusClass">@statusLabel</span>
+                            </div>
+                        </div>
+
+                        @if (!string.IsNullOrWhiteSpace(Model.SpecialRequests))
+                        {
+                            <div class="special-request">
+                                <h6>Yêu cầu đặc biệt</h6>
+                                <p>@Model.SpecialRequests</p>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="card-block timeline-card">
+                        <h3>Hành trình đặt bàn</h3>
+                        <div class="timeline">
+                            <div class="timeline-step completed">
+                                <span class="step-icon"><i class="fas fa-paper-plane"></i></span>
+                                <div>
+                                    <h5>Yêu cầu đã gửi</h5>
+                                    <p>Chúng tôi đã nhận được yêu cầu đặt bàn của bạn.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-step @(isCancelled ? "cancelled" : (isConfirmed ? "completed" : "active"))">
+                                <span class="step-icon"><i class="fas @(isCancelled ? "fa-ban" : "fa-headset")"></i></span>
+                                <div>
+                                    <h5>@(isCancelled ? "Đã hủy" : (isConfirmed ? "Đã xác nhận" : "Đang xử lý"))</h5>
+                                    <p>
+                                        @(isCancelled
+                                            ? "Đặt bàn đã được hủy theo yêu cầu của bạn. Vui lòng liên hệ nếu cần hỗ trợ đặt lại."
+                                            : (isConfirmed
+                                                ? "Đội ngũ của chúng tôi đã xác nhận đặt bàn. Hẹn gặp bạn tại nhà hàng!"
+                                                : "Nhân viên sẽ liên hệ trong thời gian sớm nhất để xác nhận thông tin."))
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="timeline-step @(isCompleted ? "completed" : (isCancelled ? "cancelled" : "pending"))">
+                                <span class="step-icon"><i class="fas fa-champagne-glasses"></i></span>
+                                <div>
+                                    <h5>@(isCompleted ? "Đã hoàn thành" : "Trải nghiệm của bạn")</h5>
+                                    <p>@(isCompleted ? "Cảm ơn bạn đã ghé thăm. Hẹn gặp lại ở lần tiếp theo!" : "Đến đúng giờ để chúng tôi phục vụ tốt nhất cho bạn.")</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="secondary-column">
+                    <div class="card-block info-card">
+                        <h3>Chuẩn bị cho trải nghiệm</h3>
+                        <ul class="info-list">
+                            <li>
+                                <span class="icon"><i class="fas fa-clock"></i></span>
+                                <div>
+                                    <h6>Đến đúng giờ</h6>
+                                    <p>Chúng tôi giữ bàn trong 15 phút kể từ thời gian đặt.</p>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="icon"><i class="fas fa-phone"></i></span>
+                                <div>
+                                    <h6>Thay đổi kế hoạch</h6>
+                                    <p>Liên hệ sớm nếu bạn muốn điều chỉnh thời gian hoặc số khách.</p>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="icon"><i class="fas fa-id-card"></i></span>
+                                <div>
+                                    <h6>Mang theo mã đặt bàn</h6>
+                                    <p>Trình mã đặt bàn #@Model.Id.ToString().PadLeft(6, '0') khi đến nhà hàng.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card-block contact-card">
+                        <h3>Liên hệ & địa chỉ</h3>
+                        <div class="contact-row">
+                            <span class="icon"><i class="fas fa-phone"></i></span>
+                            <div>
+                                <small>Điện thoại</small>
+                                <a href="tel:+84123456789">+84 123 456 789</a>
+                            </div>
+                        </div>
+                        <div class="contact-row">
+                            <span class="icon"><i class="fas fa-envelope"></i></span>
+                            <div>
+                                <small>Email</small>
+                                <a href="mailto:booking@restaurantly.com">booking@restaurantly.com</a>
+                            </div>
+                        </div>
+                        <div class="contact-row">
+                            <span class="icon"><i class="fas fa-location-dot"></i></span>
+                            <div>
+                                <small>Địa chỉ</small>
+                                <p>123 Đường ABC, Quận 1, TP.HCM</p>
+                            </div>
+                        </div>
+                        <div class="map-frame">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.502688934941!2d106.70042357473999!3d10.772999959206915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f3f0c7e9f49%3A0xf4be31779042f2f5!2zMTIzIE5ndXnhu4VuIEh1w6FpLCBRdeG6rW4gMSwgVGjDoG5oIHBo4buRIEjDsm5nIE3DoGkgQmFuZw!5e0!3m2!1svi!2s!4v1708231234567" allowfullscreen="" loading="lazy"></iframe>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <div class="action-bar">
+                <button type="button" onclick="window.print()" class="btn btn-outline-secondary"><i class="fas fa-print me-2"></i>In thông tin</button>
+                <a href="@Url.Action("Check")" class="btn btn-outline-primary"><i class="fas fa-search me-2"></i>Kiểm tra đặt bàn</a>
+                <a href="@Url.Action("Index", "Menu")" class="btn btn-outline-success"><i class="fas fa-utensils me-2"></i>Xem thực đơn</a>
+                <a href="@Url.Action("Index", "Home")" class="btn btn-primary"><i class="fas fa-home me-2"></i>Về trang chủ</a>
+            </div>
+
+            <div class="thank-you-card">
+                <h4>Cảm ơn bạn đã tin tưởng Restaurantly!</h4>
+                <p>Chúng tôi rất mong được chào đón bạn và mang đến trải nghiệm ẩm thực đáng nhớ.</p>
+            </div>
+        </section>
+    </div>
+</div>

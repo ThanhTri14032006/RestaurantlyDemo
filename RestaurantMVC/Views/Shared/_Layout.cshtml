@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Nhà Hàng Restaurantly</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/theme.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/winter.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages.css" asp-append-version="true" />
+    @{ var _controller = ViewContext.RouteData.Values["controller"]?.ToString(); var _action = ViewContext.RouteData.Values["action"]?.ToString(); var _pageCssHref = Url.Content($"~/css/pages/{_controller}/{_action}.css"); }
+    <link rel="stylesheet" href="@_pageCssHref" asp-append-version="true" />
+    @{ var controllerName = ViewContext.RouteData.Values["controller"]?.ToString(); }
+    @if (controllerName == "Booking")
+    {
+        <link rel="stylesheet" href="~/css/pages/Booking/shared.css" asp-append-version="true" />
+    }
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    @RenderSection("Styles", required: false)
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            padding-top: 88px; /* Adjusted to match actual header height */
+            background-color: #0c0d10; /* prevent bright white band under header */
+        }
+        
+        /* Responsive adjustments */
+        @@media (max-width: 991px) {
+            body {
+                padding-top: 72px;
+                background-color: #0c0d10;
+            }
+        }
+
+        /* Remove visual gap globally: pull up the first section under fixed header */
+        header.fixed-top + * {
+            margin-top: -88px;
+            padding-top: calc(88px + 24px);
+            background-clip: padding-box;
+        }
+        @@media (max-width: 991px) {
+            header.fixed-top + * {
+                margin-top: -72px;
+                padding-top: calc(72px + 20px);
+            }
+        }
+    </style>
+</head>
+@{ var bodyClass = ViewContext.RouteData.Values["controller"]?.ToString()=="Admin" ? "admin-page" : (ViewContext.RouteData.Values["controller"]?.ToString()=="Booking" ? "booking-page" : ""); }
+<body class="@bodyClass">
+    <header>
+        @await Html.PartialAsync("_Header")
+    </header>
+    
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    @* Customer Chat Widget (hidden on Admin pages) *@
+    @{ var _ctrl = ViewContext.RouteData.Values["controller"]?.ToString(); }
+    @if (_ctrl != "Admin")
+    {
+        @await Html.PartialAsync("_ChatWidget")
+    }
+
+    <footer class="winter-footer text-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5><i class="fas fa-utensils me-2 text-warning"></i>Restaurantly</h5>
+                    <p class="mb-3">Nhà hàng phục vụ các món ăn truyền thống Việt Nam với chất lượng tuyệt vời và dịch vụ tận tâm.</p>
+                    <div class="d-flex">
+                        <a href="#" class="text-light me-3 fs-5 footer-social"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-light me-3 fs-5 footer-social"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-light me-3 fs-5 footer-social"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-light fs-5 footer-social"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Liên kết nhanh</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-light text-decoration-none footer-link"><i class="fas fa-chevron-right me-2"></i>Trang chủ</a></li>
+                        <li><a href="/Menu" class="text-light text-decoration-none footer-link"><i class="fas fa-chevron-right me-2"></i>Thực đơn</a></li>
+                        <li><a href="/Booking" class="text-light text-decoration-none footer-link"><i class="fas fa-chevron-right me-2"></i>Đặt bàn</a></li>
+                        <li><a href="@Url.Action("Contact", "Home")" class="text-light text-decoration-none footer-link"><i class="fas fa-chevron-right me-2"></i>Liên hệ</a></li>
+                        <li><a href="@Url.Action("About", "Home")" class="text-light text-decoration-none footer-link"><i class="fas fa-chevron-right me-2"></i>Về chúng tôi</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Thông tin liên hệ</h5>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt me-2 text-warning"></i>123 Đường Nguyễn Huệ, Quận 1, TP.HCM</p>
+                        <p><i class="fas fa-phone me-2 text-warning"></i>(028) 1234 5678</p>
+                        <p><i class="fas fa-envelope me-2 text-warning"></i>info@restaurantly.com</p>
+                        <div class="mt-3">
+                            <h6>Giờ mở cửa</h6>
+                            <p class="mb-1"><i class="fas fa-clock me-2 text-warning"></i>Thứ 2 - Thứ 6: 10:00 - 22:00</p>
+                            <p><i class="fas fa-clock me-2 text-warning"></i>Thứ 7 - Chủ nhật: 9:00 - 23:00</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Đăng ký nhận tin</h5>
+                    <p>Nhận thông tin về các món ăn mới và ưu đãi đặc biệt</p>
+                    <form class="newsletter-form">
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Email của bạn" required>
+                            <button class="btn btn-warning" type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="mt-3">
+                        <h6>Chứng nhận</h6>
+                        <div class="d-flex">
+                            <span class="badge bg-success me-2"><i class="fas fa-certificate"></i> HACCP</span>
+                            <span class="badge bg-primary"><i class="fas fa-star"></i> 5 Sao</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="my-4">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2024 Restaurantly. Tất cả quyền được bảo lưu.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-light text-decoration-none me-3">Chính sách bảo mật</a>
+                    <a href="#" class="text-light text-decoration-none">Điều khoản sử dụng</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <style>
+        .footer-social {
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        
+        .footer-social:hover {
+            color: #9bd3ff !important;
+            transform: translateY(-2px);
+        }
+        
+        .footer-link {
+            transition: color 0.3s ease;
+            padding: 2px 0;
+            display: inline-block;
+        }
+        
+        .footer-link:hover {
+            color: #9bd3ff !important;
+        }
+        
+        .newsletter-form .btn {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        
+        .contact-info p {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/admin-table.js" asp-append-version="true"></script>
+    <script src="~/js/snow.js" asp-append-version="true"></script>
+    @* Hiển thị thông báo từ TempData thông qua hệ thống notification *@
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                if (typeof showNotification === 'function') {
+                    showNotification('@TempData["SuccessMessage"]', 'success');
+                }
+            });
+        </script>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                if (typeof showNotification === 'function') {
+                    showNotification('@TempData["ErrorMessage"]', 'error');
+                }
+            });
+        </script>
+    }
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

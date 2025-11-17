@@ -1,0 +1,129 @@
+@model IEnumerable<RestaurantMVC.Models.MenuItem>
+@{
+  ViewData["Title"] = "Thực đơn";
+  var items = (Model ?? Enumerable.Empty<RestaurantMVC.Models.MenuItem>())
+  .OrderBy(m => m.Category).ThenBy(m => m.Name);
+  var hasItems = items.Any();
+  Func<string, string> displayCategory = cat =>
+  string.IsNullOrWhiteSpace(cat) ? "Khác" :
+  (cat.Equals("Main Course", StringComparison.OrdinalIgnoreCase) ? "Main Dish" : cat);
+  
+  var cats = (ViewBag.Categories as IEnumerable<string>) ?? new List<string>();
+  var selected = ViewBag.SelectedCategory as string ?? "";
+}
+
+<link rel="stylesheet" href="~/css/menu.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/pages/Menu/Index.css" asp-append-version="true" />
+
+<section class="menu-page">
+  <!-- Hero Section -->
+  <div class="menu-hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <p class="hero-eyebrow">Quality Food For You</p>
+      <h1 class="hero-title">Our Specialities</h1>
+      <p class="hero-subtitle">Authentic food from our restaurant served with high quality ingredients.</p>
+    </div>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <div class="menu-nav-section">
+    <div class="container">
+      <div class="menu-nav-tabs">
+        <a href="@Url.Action("Index", "Menu")" class="nav-tab @(string.IsNullOrEmpty(selected) ? "active" : "")">
+          Specialities
+        </a>
+        @foreach (var c in cats)
+        {
+          <a href="@Url.Action("Index", "Menu", new { category = c })" class="nav-tab @(selected == c ? "active" : "")">
+            @displayCategory(c)
+          </a>
+        }
+        @if (User?.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
+        {
+          <a href="@Url.Action("Menu", "Admin")" class="nav-tab manage-tab">
+            <i class="fas fa-tools me-2"></i>Manage
+          </a>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="menu-search-section">
+    <div class="container">
+      <div class="search-wrapper">
+        <div class="input-group">
+          <span class="input-group-text"><i class="fas fa-search"></i></span>
+          <input id="menuSearch" type="text" class="form-control" placeholder="Tìm món ăn... (tối thiểu 2 ký tự)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu Items -->
+  <div class="menu-items-section">
+    <div class="container">
+      @if (!hasItems)
+      {
+        <div class="alert alert-warning text-center">Không có món nào trong thực đơn. Vui lòng quay lại sau.</div>
+      }
+      else
+      {
+        var groupedItems = items.GroupBy(m => m.Category?.Trim() ?? "Khác").ToList();
+        int itemIndex = 0;
+        
+        @foreach (var grp in groupedItems)
+        {
+          var list = grp.ToList();
+          @foreach (var item in list)
+          {
+            var isEven = itemIndex % 2 == 0;
+            <div class="menu-item-card @(isEven ? "image-left" : "image-right")">
+              @if (!string.IsNullOrEmpty(item.ImageUrl))
+              {
+                <div class="menu-item-image">
+                  <img src="@item.ImageUrl" alt="@item.Name" />
+                </div>
+              }
+              <div class="menu-item-content">
+                <h2 class="item-title">@item.Name.ToUpper()</h2>
+                <p class="item-description">
+                  Ingredients: @(!string.IsNullOrWhiteSpace(item.Description) ? item.Description : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ut imperdiet lectus. Donec vitae vulputate nunc, in laoreet urna.")
+                </p>
+                <div class="item-price">@item.Price.ToString("N0") ₫</div>
+                <a href="@Url.Action("Details", "Menu", new { id = item.Id })" class="item-link">
+                  Xem chi tiết <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+            itemIndex++;
+          }
+        }
+      }
+      
+      <div id="noResults" class="no-results d-none">
+        <i class="fas fa-search"></i>
+        <p>Không tìm thấy món ăn phù hợp</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dining Events Section -->
+  <div class="dining-events-section">
+    <div class="events-overlay"></div>
+    <div class="container events-content">
+      <div class="events-divider"></div>
+      <p class="events-eyebrow">Choose Your Event</p>
+      <h2 class="events-title">Dining Events</h2>
+      <p class="events-subtitle">We provide dining event for your special day with your important people.</p>
+      <div class="events-cta">
+        <a href="@Url.Action("Index", "Booking")" class="btn-events">
+          Book Your Event <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="~/js/menu.js" asp-append-version="true"></script>

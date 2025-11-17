@@ -1,0 +1,8 @@
+@model RestaurantMVC.Models.MenuItem
+@{
+    ViewData["Title"] = "/Admin/EditMenuItem";
+    ViewData["FormAction"] = "EditMenuItem";
+    Layout = "_AdminLayout";
+}
+
+<partial name="_MenuItemForm" model="Model" />

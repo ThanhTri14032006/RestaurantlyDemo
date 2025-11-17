@@ -1,0 +1,105 @@
+/* Dark theme backgrounds for specific pages */
+.about-page {
+  background: #cecfd1;
+  min-height: 100vh;
+}
+
+.contact-page {
+  background: #e6e6e7;
+  min-height: 100vh;
+}
+
+.blog-page {
+  background: #e6e7ea;
+  min-height: 100vh;
+  color: #e5e7eb;
+}
+
+/* Blog cards: dark variant to avoid white blocks */
+.blog-card,
+.blog-page .card {
+  background-color: #e7e7f0;
+  border-color: #1f2230;
+  color: #0a0a0a;
+}
+
+.blog-card .card-title {
+  color: #0d0d0e;
+}
+
+.blog-card .card-text,
+.blog-card .text-muted,
+.blog-page .card .card-text,
+.blog-page .card .text-muted {
+  color: #151516 !important;
+}
+/* Blog headings and muted text */
+.blog-page h1,
+.blog-page .display-5,
+.blog-page h2,
+.blog-page h3,
+.blog-page h4,
+.blog-page h5,
+.blog-page h6 {
+  color: #010101;
+}
+
+.blog-page .text-muted,
+.blog-page .small {
+  color: #0e0f0f !important;
+}
+
+/* About & Contact cards: dark variant */
+.about-page .card,
+.contact-page .card {
+  background-color: #929292;
+  border-color: #545457;
+  color: #e5e7eb;
+}
+
+.about-page .card .card-title,
+.contact-page .card .card-title {
+  color: #f3f4f6;
+}
+
+.about-page .card .card-text,
+.about-page .card .text-muted,
+.contact-page .card .card-text,
+.contact-page .card .text-muted {
+  color: #cbd5e1 !important;
+}
+
+/* Optional: lighten links on dark background */
+.blog-page a,
+.about-page a,
+.contact-page a {
+  color: #8ab4f8;
+}
+
+.blog-page a:hover,
+.about-page a:hover,
+.contact-page a:hover {
+  color: #a6c8ff;
+}
+
+/* Ensure containers have transparent background so page bg shows */
+.about-page .container,
+.contact-page .container,
+.blog-page .container {
+  background: transparent;
+}
+
+/* Spacing guard under fixed header (relies on global header spacing already set) */
+.about-page > *,
+.contact-page > *,
+.blog-page > * {
+  padding-top: 24px;
+}
+
+@media (max-width: 991.98px) {
+  .about-page > *,
+  .contact-page > *,
+  .blog-page > * {
+    padding-top: 16px;
+  }
+}

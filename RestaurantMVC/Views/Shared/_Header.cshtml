@@ -1,0 +1,104 @@
+<!-- Unified Header -->
+<header class="fixed-top" style="background: rgba(12, 11, 9, 0.95); backdrop-filter: blur(10px);">
+    <!-- Top Contact Bar -->
+    <div class="top-contact-bar text-white py-2 d-none d-lg-block"
+        style="font-size: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-envelope me-2 text-warning"></i>
+                        <a href="mailto:2400006519@nttu.edu.vn" class="me-4 text-decoration-none text-light">
+                            2400006519@nttu.edu.vn
+                        </a>
+                        <i class="fas fa-phone me-2 text-warning"></i>
+                        <a href="tel:+84931254118" class="text-decoration-none text-light">
+                            +84 931 254 118
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-6 text-end">
+                    <a href="@Url.Action("Index","Home")" class="me-3 text-decoration-none text-light">EN</a>
+                    <span>|</span>
+                    <a href="@Url.Action("Index","Home")" class="ms-3 text-decoration-none text-light">VN</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-2" href="@Url.Action("Index", "Home")"
+                style="color: #cda45e; font-family: 'Playfair Display', serif;">
+                Restaurantly
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link px-3 py-2 text-white fw-medium" href="@Url.Action("Index", "Home")"
+                            style="transition: color 0.3s ease;">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 py-2 text-white fw-medium" href="@Url.Action("Index", "Menu")"
+                            style="transition: color 0.3s ease;">Thực đơn</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 py-2 text-white fw-medium" href="@Url.Action("About", "Home")"
+                            style="transition: color 0.3s ease;">Giới thiệu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 py-2 text-white fw-medium" href="/Blog"
+                            style="transition: color 0.3s ease;">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 py-2 text-white fw-medium" href="@Url.Action("Index", "Home")#gallery"
+                            style="transition: color 0.3s ease;">Gallery</a>
+                    </li>
+                    <!--li class="nav-item"-->
+                    <!--a class="nav-link px-3 py-2 text-white fw-medium" href="#" style="transition: color 0.3s ease;">Events</a-->
+                    <!--/li>
+                    <--li class="nav-item">
+                        <--a class="nav-link px-3 py-2 text-white fw-medium" href="#" style="transition: color 0.3s ease;">Chefs</a-->
+                    <!--/li-->
+                    <!--li class="nav-item"-->
+                    <!--a class="nav-link px-3 py-2 text-white fw-medium" href="#" style="transition: color 0.3s ease;">Gallery</a-->
+                    <!--/li-->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle px-3 py-2 text-white fw-medium" href="#" role="button"
+                            data-bs-toggle="dropdown" style="transition: color 0.3s ease;">
+                            Đặt bàn
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow" style="background: rgba(12, 11, 9, 0.95);">
+                            <li><a class="dropdown-item text-white" href="@Url.Action("Check", "Booking")">Kiểm tra đặt bàn</a></li>
+                            <li>
+                                <hr class="dropdown-divider border-secondary">
+                            <li><a class="dropdown-item text-white" href="@Url.Action("Index", "Booking")">Đặt bàn ngay</a></li>
+                            <li>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 py-2 text-white fw-medium" href="@Url.Action("Contact", "Home")"
+                            style="transition: color 0.3s ease;">Liên hệ</a>
+                    </li>
+                </ul>
+                <div class="navbar-nav align-items-center gap-2">
+                    <a class="nav-link text-white" href="/Blog#search" title="Search">
+                        <i class="fas fa-search"></i>
+                    </a>
+                    <a class="btn btn-outline-warning px-4 py-2 fw-bold text-uppercase"
+                        href="@Url.Action("Index", "Booking")"
+                        style="border: 2px solid #cda45e; color: #cda45e; transition: all 0.3s ease; letter-spacing: 1px;">
+                        Reservations
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+</header>

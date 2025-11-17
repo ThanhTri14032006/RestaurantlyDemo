@@ -1,0 +1,181 @@
+@{
+    ViewData["Title"] = "Liên hệ";
+}
+
+<section class="contact-page">
+    <div class="container py-5">
+        <!-- Header Section -->
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-4 fw-bold mb-4">Liên hệ với chúng tôi</h1>
+                <p class="lead">Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn</p>
+            </div>
+        </div>
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>@ViewBag.Message
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="row">
+            <!-- Contact Form -->
+            <div class="col-lg-8 mb-5">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="fas fa-envelope me-2"></i>Gửi tin nhắn cho chúng tôi</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="post" asp-action="Contact">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Họ và tên <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email <span
+                                            class="text-danger">*</span></label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">Số điện thoại</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="subject" class="form-label">Chủ đề <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select" id="subject" name="subject" required>
+                                        <option value="">Chọn chủ đề</option>
+                                        <option value="Đặt bàn">Đặt bàn</option>
+                                        <option value="Thực đơn">Thực đơn</option>
+                                        <option value="Sự kiện">Tổ chức sự kiện</option>
+                                        <option value="Khiếu nại">Khiếu nại</option>
+                                        <option value="Khác">Khác</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Nội dung <span
+                                        class="text-danger">*</span></label>
+                                <textarea class="form-control" id="message" name="message" rows="5"
+                                    placeholder="Vui lòng nhập nội dung tin nhắn của bạn..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>Gửi tin nhắn
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Thông tin liên hệ</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                style="width: 40px; height: 40px;">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <strong>Địa chỉ:</strong><br>
+                                123 Đường ABC, Quận 1<br>
+                                TP. Hồ Chí Minh
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                style="width: 40px; height: 40px;">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>
+                                <strong>Điện thoại:</strong><br>
+                                <a href="tel:+84123456789" class="text-decoration-none">+84 123 456 789</a>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                style="width: 40px; height: 40px;">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <strong>Email:</strong><br>
+                                <a href="mailto:info@restaurantly.com"
+                                    class="text-decoration-none">info@restaurantly.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Giờ mở cửa</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Thứ 2 - Thứ 6:</span>
+                            <span class="fw-bold">10:00 - 22:00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Thứ 7 - Chủ nhật:</span>
+                            <span class="fw-bold">09:00 - 23:00</span>
+                        </div>
+                        <hr>
+                        <div class="text-center">
+                            <small class="text-muted">Nghỉ các ngày lễ lớn</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-share-alt me-2"></i>Theo dõi chúng tôi</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <a href="#" class="btn btn-outline-primary btn-sm me-2 mb-2">
+                            <i class="fab fa-facebook-f"></i> Facebook
+                        </a>
+                        <a href="#" class="btn btn-outline-info btn-sm me-2 mb-2">
+                            <i class="fab fa-instagram"></i> Instagram
+                        </a>
+                        <a href="#" class="btn btn-outline-danger btn-sm mb-2">
+                            <i class="fab fa-youtube"></i> YouTube
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-map me-2"></i>Vị trí nhà hàng</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
+                            <div class="text-center text-muted">
+                                <i class="fas fa-map-marked-alt fa-3x mb-3"></i>
+                                <p>Bản đồ sẽ được hiển thị tại đây</p>
+                                <small>123 Đường ABC, Quận 1, TP. Hồ Chí Minh</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

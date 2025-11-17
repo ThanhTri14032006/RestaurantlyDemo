@@ -1,0 +1,88 @@
+/* Scope tất cả style Admin để không ảnh hưởng client */
+.admin-page {
+  --admin-primary: #4e73df;
+  --admin-success: #1cc88a;
+  --admin-info: #36b9cc;
+  --admin-warning: #f6c23e;
+  --admin-danger: #e74a3b;
+}
+
+.admin-page .container-fluid {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.admin-page .card {
+  border: 1px solid #e3e6f0;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58,59,69,.15);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.admin-page .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.25rem 2rem rgba(58,59,69,.2);
+}
+
+.admin-page .card-header {
+  background: #fff;
+  border-bottom: 1px solid #e3e6f0;
+}
+
+.admin-page h1.h3 {
+  font-weight: 600;
+}
+
+.admin-page .table {
+  margin-bottom: 0;
+}
+
+.admin-page .table thead th {
+  border-top: none;
+  font-weight: 600;
+  color: #5a5c69;
+  white-space: nowrap;
+}
+
+.admin-page .table tbody td {
+  vertical-align: middle;
+}
+
+.admin-page .table-responsive {
+  border-radius: .375rem;
+}
+
+.admin-page .badge {
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+.admin-page .btn-group .btn {
+  margin-right: 4px;
+}
+.admin-page .btn-group .btn:last-child {
+  margin-right: 0;
+}
+
+/* Header utilities */
+.admin-page .page-actions .btn {
+  margin-left: .5rem;
+}
+
+/* Filters spacing */
+.admin-page .filter-group .form-label { font-weight: 600; }
+.admin-page .filter-group .input-group .btn { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+
+/* Color helpers */
+.admin-page .text-primary { color: var(--admin-primary) !important; }
+.admin-page .bg-primary { background-color: var(--admin-primary) !important; }
+.admin-page .bg-success { background-color: var(--admin-success) !important; }
+.admin-page .bg-info { background-color: var(--admin-info) !important; }
+.admin-page .bg-warning { background-color: var(--admin-warning) !important; }
+.admin-page .bg-danger { background-color: var(--admin-danger) !important; }
+
+/* Responsive actions stack */
+@media (max-width: 768px) {
+  .admin-page .btn-group { flex-direction: column; }
+  .admin-page .btn-group .btn { margin-right: 0; margin-bottom: 4px; }
+  .admin-page .btn-group .btn:last-child { margin-bottom: 0; }
+}

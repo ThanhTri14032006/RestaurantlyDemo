@@ -1,0 +1,75 @@
+/* Admin Chat page styles */
+
+.admin-chat-box {
+  background: #0b1324;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.chat-msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 72%;
+  margin: 8px 0;
+}
+
+.chat-msg-admin {
+  margin-left: auto;
+  align-items: flex-end;
+}
+
+.chat-msg-customer {
+  margin-right: auto;
+  align-items: flex-start;
+}
+
+.chat-meta {
+  opacity: 0.8;
+  margin-bottom: 4px;
+}
+
+.chat-bubble {
+  padding: 10px 12px;
+  border-radius: 14px;
+  line-height: 1.5;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.chat-msg-admin .chat-bubble {
+  background: #2563eb;
+  color: #fff;
+}
+
+.chat-msg-customer .chat-bubble {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* Conversation list */
+#conv-list .list-group-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#conv-list .list-group-item::before {
+  content: "\f086";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  color: #64748b;
+}
+
+.card-footer .input-group .form-control {
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
+}
+
+.card-footer .input-group .btn {
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
+}
+
+.card-header {
+  background: #0f172a;
+  color: #cbd5e1;
+}

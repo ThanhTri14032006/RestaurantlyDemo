@@ -1,0 +1,11 @@
+/* Blog Index page specific styles; reuse base Blog.css */
+@import url('../Blog.css');
+
+/* Decorative starry background overlay to match the template */
+.blog-page {
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.11) 0, rgba(255,255,255,0.11) 2px, transparent 3px),
+    radial-gradient(1px 1px at 50px 80px, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 1px, transparent 2px);
+  background-size: 120px 120px, 180px 180px;
+  background-repeat: repeat;
+}

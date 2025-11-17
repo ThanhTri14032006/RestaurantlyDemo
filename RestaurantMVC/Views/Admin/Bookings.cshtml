@@ -1,0 +1,387 @@
+@model IEnumerable<RestaurantMVC.Models.Booking>
+@{
+    ViewData["Title"] = "/Admin/Bookings";
+    Layout = "_AdminLayout";
+}
+
+<div class="admin-page">
+    <div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                        Quản lý đặt bàn
+                    </h1>
+                    <p class="text-muted mb-0">Xem và quản lý tất cả đặt bàn của khách hàng</p>
+                </div>
+                <div>
+                    <a href="@Url.Action("Index", "Admin")" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Quay lại Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-filter me-2"></i>Bộ lọc
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <form method="get" id="filterForm">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Trạng thái</label>
+                                <select name="status" class="form-select" onchange="document.getElementById('filterForm').submit()">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option value="Pending" selected="@(ViewBag.CurrentStatus == "Pending")">Chờ xử lý</option>
+                                    <option value="Confirmed" selected="@(ViewBag.CurrentStatus == "Confirmed")">Đã xác nhận</option>
+                                    <option value="Cancelled" selected="@(ViewBag.CurrentStatus == "Cancelled")">Đã hủy</option>
+                                    <option value="Completed" selected="@(ViewBag.CurrentStatus == "Completed")">Hoàn thành</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Từ ngày</label>
+                                <input type="date" name="fromDate" class="form-control" 
+                                       value="@ViewBag.FromDate" onchange="document.getElementById('filterForm').submit()">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Đến ngày</label>
+                                <input type="date" name="toDate" class="form-control" 
+                                       value="@ViewBag.ToDate" onchange="document.getElementById('filterForm').submit()">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Tìm kiếm</label>
+                                <div class="input-group">
+                                    <input type="text" name="search" class="form-control" 
+                                           placeholder="Tên khách hàng, email..." value="@ViewBag.SearchTerm">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Summary -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="text-white-50 small">Tổng đặt bàn</div>
+                            <div class="h5 mb-0">@Model.Count()</div>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-calendar-check fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="text-white-50 small">Chờ xử lý</div>
+                            <div class="h5 mb-0">@Model.Count(b => b.Status == RestaurantMVC.Models.BookingStatus.Pending)</div>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-clock fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="text-white-50 small">Đã xác nhận</div>
+                            <div class="h5 mb-0">@Model.Count(b => b.Status == RestaurantMVC.Models.BookingStatus.Confirmed)</div>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-check-circle fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="text-white-50 small">Hoàn thành</div>
+                            <div class="h5 mb-0">@Model.Count(b => b.Status == RestaurantMVC.Models.BookingStatus.Completed)</div>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-check-double fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bookings Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-list me-2"></i>Danh sách đặt bàn
+                        @if (Model.Any())
+                        {
+                            <span class="badge bg-secondary ms-2">@Model.Count() kết quả</span>
+                        }
+                    </h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="bookingsTable" data-enhance="true" data-page-size="10">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Khách hàng</th>
+                                        <th>Liên hệ</th>
+                                        <th>Ngày đặt</th>
+                                        <th>Số người</th>
+                                        <th>Trạng thái</th>
+                                        <th>Ghi chú</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var booking in Model.OrderByDescending(b => b.CreatedAt))
+                                    {
+                                        <tr>
+                                            <td><strong>#@booking.Id</strong></td>
+                                            <td>
+                                                <div class="fw-bold">@booking.CustomerName</div>
+                                                <small class="text-muted">@booking.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                                            </td>
+                                            <td>
+                                                <div><i class="fas fa-phone me-1"></i>@booking.Phone</div>
+                                                <div><i class="fas fa-envelope me-1"></i>@booking.Email</div>
+                                            </td>
+                                            <td>
+                                                <div class="fw-bold">@booking.BookingDate.ToString("dd/MM/yyyy")</div>
+                                                <small class="text-muted">@booking.BookingTime.ToString(@"hh\:mm")</small>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-light text-dark">@booking.PartySize người</span>
+                                            </td>
+                                            <td>
+                                                @switch (booking.Status)
+                                                {
+                                                    case RestaurantMVC.Models.BookingStatus.Pending:
+                                                        <span class="badge bg-warning">Chờ xử lý</span>
+                                                        break;
+                                                    case RestaurantMVC.Models.BookingStatus.Confirmed:
+                                                        <span class="badge bg-success">Đã xác nhận</span>
+                                                        break;
+                                                    case RestaurantMVC.Models.BookingStatus.Cancelled:
+                                                        <span class="badge bg-danger">Đã hủy</span>
+                                                        break;
+                                                    case RestaurantMVC.Models.BookingStatus.Completed:
+                                                        <span class="badge bg-info">Hoàn thành</span>
+                                                        break;
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(booking.SpecialRequests))
+                                                {
+                                                    <span class="text-truncate d-inline-block" style="max-width: 150px;" 
+                                                          title="@booking.SpecialRequests">
+                                                        @booking.SpecialRequests
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">Không có</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <a class="btn btn-sm btn-outline-info" href="@Url.Action("BookingDetails", "Admin", new { id = booking.Id })" title="Chi tiết">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    @if (booking.Status == RestaurantMVC.Models.BookingStatus.Pending)
+                                                    {
+                                                        <button type="button" class="btn btn-sm btn-outline-success" 
+                                                                onclick="updateBookingStatus(@booking.Id, 'Confirmed')">
+                                                            <i class="fas fa-check"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                                onclick="updateBookingStatus(@booking.Id, 'Cancelled')">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    }
+                                                    @if (booking.Status == RestaurantMVC.Models.BookingStatus.Confirmed)
+                                                    {
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" 
+                                                                onclick="updateBookingStatus(@booking.Id, 'Completed')">
+                                                            <i class="fas fa-check-double"></i>
+                                                        </button>
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                            <h5 class="text-muted">Không tìm thấy đặt bàn nào</h5>
+                            <p class="text-muted">Thử thay đổi bộ lọc hoặc tìm kiếm với từ khóa khác</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden anti-forgery token for JS POST actions -->
+    <form id="antiForgeryForm" method="post" style="display:none;">
+        @Html.AntiForgeryToken()
+    </form>
+</div>
+
+<!-- Booking Details Modal -->
+<div class="modal fade" id="bookingDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chi tiết đặt bàn</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="bookingDetailsContent">
+                <!-- Content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function viewBookingDetails(bookingId) {
+    // In a real application, you would fetch booking details via AJAX
+    // For now, we'll show a placeholder
+    const content = `
+        <div class="text-center py-4">
+            <i class="fas fa-info-circle fa-3x text-primary mb-3"></i>
+            <h5>Chi tiết đặt bàn #${bookingId}</h5>
+            <p class="text-muted">Tính năng này sẽ được triển khai trong phiên bản tiếp theo</p>
+        </div>
+    `;
+    
+    document.getElementById('bookingDetailsContent').innerHTML = content;
+    new bootstrap.Modal(document.getElementById('bookingDetailsModal')).show();
+}
+
+function updateBookingStatus(bookingId, newStatus) {
+    if (confirm(`Bạn có chắc chắn muốn cập nhật trạng thái đặt bàn #${bookingId}?`)) {
+        // Create a form and submit it
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '@Url.Action("UpdateBookingStatus", "Admin")';
+        
+        const idInput = document.createElement('input');
+        idInput.type = 'hidden';
+        idInput.name = 'id';
+        idInput.value = bookingId;
+        
+        const statusInput = document.createElement('input');
+        statusInput.type = 'hidden';
+        statusInput.name = 'status';
+        statusInput.value = newStatus;
+        
+        // Add anti-forgery token
+        const tokenInput = document.createElement('input');
+        tokenInput.type = 'hidden';
+        tokenInput.name = '__RequestVerificationToken';
+        tokenInput.value = document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+        
+        form.appendChild(idInput);
+        form.appendChild(statusInput);
+        form.appendChild(tokenInput);
+        
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+// Đã loại bỏ thông báo tự bật yêu cầu tải lại trang định kỳ
+// Nếu cần, có thể thêm nút thủ công để tải lại trang:
+// <button type="button" class="btn btn-outline-secondary btn-sm" onclick="location.reload()">Tải lại</button>
+</script>
+
+<style>
+.table th {
+    border-top: none;
+    font-weight: 600;
+    color: #5a5c69;
+    white-space: nowrap;
+}
+
+.btn-group .btn {
+    margin-right: 2px;
+}
+
+.btn-group .btn:last-child {
+    margin-right: 0;
+}
+
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card {
+    transition: all 0.3s ease;
+}
+
+.badge {
+    font-size: 0.75em;
+}
+
+.table-responsive {
+    border-radius: 0.375rem;
+}
+
+@@media (max-width: 768px) {
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    .btn-group .btn {
+        margin-bottom: 2px;
+        margin-right: 0;
+    }
+}
+</style>

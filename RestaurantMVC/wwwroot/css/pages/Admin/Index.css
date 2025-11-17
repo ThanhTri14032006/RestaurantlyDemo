@@ -1,0 +1,9 @@
+/* CSS riêng cho trang Admin/Index */
+
+.admin-topbar {
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+}
+
+.card.shadow {
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,.08) !important;
+}

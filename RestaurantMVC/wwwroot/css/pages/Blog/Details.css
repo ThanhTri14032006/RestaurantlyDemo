@@ -1,0 +1,5 @@
+/* Blog Details page specific styles; reuse base Blog.css */
+@import url('../Blog.css');
+
+/* Minor spacing tweaks for author box on details page */
+.author-card { margin-top: 12px; }

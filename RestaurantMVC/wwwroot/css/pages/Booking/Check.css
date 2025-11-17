@@ -1,0 +1,6 @@
+/* CSS riêng cho trang Booking/Check */
+/* Styles đã được tích hợp vào Check.cshtml */
+.booking-check-note {
+  font-size: 0.95rem;
+  color: #c2c6cb;
+}

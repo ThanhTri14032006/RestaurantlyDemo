@@ -1,0 +1,120 @@
+@model RestaurantMVC.Models.Order
+
+@{
+    ViewData["Title"] = "Thanh toán";
+}
+
+<div class="checkout-page container-fluid py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="fas fa-credit-card me-2"></i>Thanh toán đơn hàng</h4>
+                    </div>
+                    <div class="card-body">
+                        @if (ViewBag.CartItems != null &&
+                                                ((List<RestaurantMVC.Models.CartItemViewModel>)ViewBag.CartItems).Any())
+                        {
+                            <!-- Order Summary -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="border-bottom pb-2">Chi tiết đơn hàng</h5>
+                                    @foreach (var item in (List<RestaurantMVC.Models.CartItemViewModel>)ViewBag.CartItems)
+                                    {
+                                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                                            <div>
+                                                <strong>@item.Name</strong>
+                                                <br>
+                                                <small class="text-muted">@item.Price.ToString("N0") VNĐ x
+                                                    @item.Quantity</small>
+                                            </div>
+                                            <div class="text-end">
+                                                <strong>@item.TotalPrice.ToString("N0") VNĐ</strong>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                                        <h5 class="mb-0">Tổng cộng:</h5>
+                                        <h5 class="mb-0 text-primary">@ViewBag.TotalAmount.ToString("N0") VNĐ</h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Customer Information Form -->
+                            <form asp-action="Checkout" method="post">
+                                @Html.AntiForgeryToken()
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="CustomerName" class="form-label">Họ và tên *</label>
+                                        <input asp-for="CustomerName" class="form-control" required />
+                                        <span asp-validation-for="CustomerName" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="Phone" class="form-label">Số điện thoại *</label>
+                                        <input asp-for="Phone" class="form-control" required />
+                                        <span asp-validation-for="Phone" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="Email" class="form-label">Email</label>
+                                        <input asp-for="Email" type="email" class="form-control" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="DeliveryAddress" class="form-label">Địa chỉ giao hàng *</label>
+                                        <input asp-for="DeliveryAddress" class="form-control" required />
+                                        <span asp-validation-for="DeliveryAddress" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Notes" class="form-label">Ghi chú</label>
+                                    <textarea asp-for="Notes" class="form-control" rows="3"
+                                    placeholder="Ghi chú đặc biệt cho đơn hàng..."></textarea>
+                                    <span asp-validation-for="Notes" class="text-danger"></span>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <a href="/Order" class="btn btn-secondary">
+                                            <i class="fas fa-arrow-left me-2"></i>Quay lại
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <button type="submit" class="btn btn-success btn-lg">
+                                            <i class="fas fa-check me-2"></i>Đặt hàng
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        }
+                        else
+                        {
+                            <div class="text-center py-5">
+                                <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                                <h4 class="text-muted">Giỏ hàng trống</h4>
+                                <p class="text-muted">Vui lòng thêm món ăn vào giỏ hàng trước khi thanh toán.</p>
+                                <a href="/Order" class="btn btn-primary">
+                                    <i class="fas fa-utensils me-2"></i>Xem thực đơn
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/checkout.css" asp-append-version="true" />
+}
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

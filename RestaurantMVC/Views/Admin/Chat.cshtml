@@ -1,0 +1,103 @@
+@{
+    ViewData["Title"] = "Chat";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card mb-3">
+                <div class="card-header"><i class="fas fa-comments me-2"></i>Cuộc trò chuyện</div>
+                <div class="list-group" id="conv-list"></div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span id="conv-title">Chọn một cuộc trò chuyện</span>
+                    <small class="text-muted" id="conv-id"></small>
+                </div>
+                <div class="card-body" style="min-height: 320px;">
+                    <div id="admin-chat-messages" class="admin-chat-box" style="max-height: 420px; overflow-y:auto"></div>
+                </div>
+                <div class="card-footer">
+                    <div class="input-group">
+                        <input type="text" id="admin-chat-input" class="form-control" placeholder="Nhập phản hồi...">
+                        <button class="btn btn-primary" id="admin-chat-send"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const api = {
+        all: '/Chat/All',
+        convo: (id) => `/Chat/Conversation?id=${encodeURIComponent(id)}`,
+        reply: '/Chat/Reply'
+    };
+
+    function renderAdminMsg(msg) {
+        const d = document.createElement('div');
+        const isAdmin = (msg.sender || '').toLowerCase() === 'admin';
+        d.className = `chat-msg ${isAdmin ? 'chat-msg-admin' : 'chat-msg-customer'}`;
+        const who = isAdmin ? 'Admin' : (msg.displayName || 'Khách');
+        const time = new Date(msg.createdAt).toLocaleString();
+        d.innerHTML = `
+            <div class="chat-meta small text-muted">${who} • ${time}</div>
+            <div class="chat-bubble">${escapeHtml(msg.text)}</div>
+        `;
+        return d;
+    }
+    function escapeHtml(s){ const div=document.createElement('div'); div.innerText=s; return div.innerHTML; }
+
+    async function loadConversations(){
+        const r = await fetch(api.all);
+        const j = await r.json();
+        const list = document.getElementById('conv-list');
+        list.innerHTML = '';
+        j.forEach(item => {
+            // ASP.NET Core mặc định trả JSON theo camelCase
+            const id = item.conversationId || item.ConversationId;
+            const latestSender = item.latestSender ?? item.LatestSender ?? '';
+            const latestText = item.latestText ?? item.LatestText ?? '';
+
+            const a = document.createElement('a');
+            a.href = '#';
+            a.className = 'list-group-item list-group-item-action';
+            a.textContent = `${(id||'').substring(0,8)} • ${latestSender}: ${latestText}`;
+            a.addEventListener('click', (e)=>{ e.preventDefault(); if(id) openConversation(id); });
+            list.appendChild(a);
+        });
+    }
+
+    let currentId = null;
+    async function openConversation(id){
+        currentId = id;
+        document.getElementById('conv-id').textContent = id;
+        const r = await fetch(api.convo(id));
+        const msgs = await r.json();
+        const box = document.getElementById('admin-chat-messages');
+        box.innerHTML='';
+        msgs.forEach(m=> box.appendChild(renderAdminMsg(m)) );
+        box.scrollTop = box.scrollHeight;
+    }
+
+    async function sendReply(){
+        const input = document.getElementById('admin-chat-input');
+        const text = input.value.trim();
+        if(!currentId || !text) return;
+        const fd = new FormData(); fd.append('id', currentId); fd.append('text', text);
+        await fetch(api.reply, { method: 'POST', body: fd });
+        input.value='';
+        await openConversation(currentId);
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+        loadConversations();
+        document.getElementById('admin-chat-send').addEventListener('click', sendReply);
+        document.getElementById('admin-chat-input').addEventListener('keydown', (e)=>{ if(e.key==='Enter') sendReply(); });
+        setInterval(loadConversations, 4000);
+    });
+</script>

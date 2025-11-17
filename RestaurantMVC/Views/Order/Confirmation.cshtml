@@ -1,0 +1,96 @@
+@model RestaurantMVC.Models.Order
+
+@{
+    ViewData["Title"] = "Xác nhận đơn hàng";
+}
+
+<div class="container-fluid py-5"
+    style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); min-height: 100vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body text-center py-5">
+                        <div class="mb-4">
+                            <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                        </div>
+
+                        <h2 class="text-success mb-3">Đặt hàng thành công!</h2>
+                        <p class="lead text-muted mb-4">
+                            Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ liên hệ với bạn sớm nhất để xác nhận đơn hàng.
+                        </p>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6 mx-auto">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Thông tin đơn hàng</h5>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-6 text-start">
+                                                <strong>Mã đơn hàng:</strong>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                #@Model.Id.ToString("D6")
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 text-start">
+                                                <strong>Khách hàng:</strong>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                @Model.CustomerName
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 text-start">
+                                                <strong>Số điện thoại:</strong>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                @Model.Phone
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 text-start">
+                                                <strong>Địa chỉ:</strong>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                @Model.DeliveryAddress
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 text-start">
+                                                <strong>Tổng tiền:</strong>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                <span class="text-success fw-bold">@Model.TotalAmount.ToString("N0")
+                                                    VNĐ</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 text-start">
+                                                <strong>Thời gian đặt:</strong>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="/Order" class="btn btn-primary">
+                                <i class="fas fa-utensils me-2"></i>Đặt thêm món
+                            </a>
+                            <a href="/" class="btn btn-outline-primary">
+                                <i class="fas fa-home me-2"></i>Về trang chủ
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

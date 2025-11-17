@@ -1,0 +1,121 @@
+@model IEnumerable<RestaurantMVC.Models.BlogEntry>
+@{
+    ViewData["Title"] = "Blog";
+}
+
+<link rel="stylesheet" href="~/css/pages/Blog.css" asp-append-version="true" />
+
+<section class="blog-page" id="blogPage">
+    <div class="blog-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <span class="page-label">Main Page</span>
+                    <div class="blog-logo">
+                        <span class="logo-icon">R</span>
+                        <span class="logo-text">Restaurantly Blog </span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <label class="theme-toggle">
+                        <input type="checkbox" id="themeToggle" />
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="blog-main">
+        <div class="container">
+            <h1 class="blog-title">Latest Updates</h1>
+            
+            <div class="blog-grid" id="blogList">
+                @foreach (var post in Model)
+                {
+                    <article class="blog-card">
+                        @if (!string.IsNullOrEmpty(post.ImageUrl))
+                        {
+                            <div class="blog-image">
+                                <img src="@post.ImageUrl" alt="@post.Title" />
+                            </div>
+                        }
+                        <div class="blog-content">
+                            <h2 class="blog-card-title">@post.Title</h2>
+                            <p class="blog-excerpt">@post.Excerpt</p>
+                            <div class="blog-meta">
+                                <div class="author-info">
+                                    <div class="author-avatar">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="author-details">
+                                        <span class="author-name">@(string.IsNullOrEmpty(post.Author) ? "Restaurantly" : post.Author)</span>
+                                        <span class="post-date">@post.PublishedAt.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("vi-VN"))</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="@Url.Action("Details", "Blog", new { id = post.Id })" class="read-more">
+                                Đọc tiếp <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+                }
+            </div>
+
+            <div id="noResults" class="no-results d-none">
+                <i class="fas fa-search"></i>
+                <p>Không tìm thấy bài viết phù hợp</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="blog-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <p>Thanks for <span class="highlight">coming!</span></p>
+                </div>
+                <div class="footer-center">
+                    <p>restaurantly@gmail.com</p>
+                </div>
+                <div class="footer-right">
+                    <a href="#" class="social-icon" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-icon" aria-label="Medium">
+                        <i class="fab fa-medium"></i>
+                    </a>
+                    <a href="#" class="social-icon" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</section>
+
+<script src="~/js/blog.js" asp-append-version="true"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const themeToggle = document.getElementById('themeToggle');
+    const blogPage = document.getElementById('blogPage');
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem('blogTheme') || 'light';
+    if (savedTheme === 'dark') {
+        blogPage.classList.add('dark-mode');
+        themeToggle.checked = true;
+    }
+    
+    // Toggle theme
+    themeToggle.addEventListener('change', function() {
+        if (this.checked) {
+            blogPage.classList.add('dark-mode');
+            localStorage.setItem('blogTheme', 'dark');
+        } else {
+            blogPage.classList.remove('dark-mode');
+            localStorage.setItem('blogTheme', 'light');
+        }
+    });
+});
+</script>

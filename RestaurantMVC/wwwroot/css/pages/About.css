@@ -1,0 +1,19 @@
+/* About page styling aligned with theme.css */
+.about-page { background: var(--bg, #121317); color: var(--text, #e8e8ea); }
+.about-page .display-4 { letter-spacing: .5px; }
+.about-page .lead { color: var(--muted, #a6a7ab); }
+
+.about-page .row.mb-5 h2 { font-weight: 800; }
+.about-page .card { background: var(--bg-elev, #15161a); border: 1px solid #2a2c33; border-radius: 14px; }
+.about-page .card .text-muted { color: var(--muted, #a6a7ab) !important; }
+
+.about-page .bg-light { background: var(--bg-elev, #15161a) !important; border: 1px solid #2a2c33; }
+.about-page .btn-primary { background: var(--accent, #d4af37); border: none; color: #121317; font-weight: 700; }
+.about-page .btn-warning { color: #121317; font-weight: 700; }
+
+.about-page .rounded-circle { box-shadow: 0 6px 24px rgba(0,0,0,0.35); }
+.about-page .text-center .bg-primary { background: var(--accent, #d4af37) !important; color: #121317 !important; }
+
+@media (max-width: 768px) {
+  .about-page .display-4 { font-size: 2rem; }
+}

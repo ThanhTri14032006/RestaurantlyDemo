@@ -1,0 +1,124 @@
+@model RestaurantMVC.Models.BlogEntry
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<link rel="stylesheet" href="~/css/pages/Blog.css" asp-append-version="true" />
+
+<section class="blog-page blog-details-page" id="blogPage">
+    <div class="blog-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <span class="page-label">Details</span>
+                    <div class="blog-logo">
+                        <span class="logo-icon">G</span>
+                        <span class="logo-text">BLOG</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <label class="theme-toggle">
+                        <input type="checkbox" id="themeToggle" />
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="blog-main">
+        <div class="container">
+            <article class="blog-post">
+                <h1 class="post-title">@Model.Title</h1>
+                
+                <div class="post-meta">
+                    <div class="author-info">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="author-details">
+                            <span class="author-name">@(string.IsNullOrEmpty(Model.Author) ? "Restaurantly" : Model.Author)</span>
+                            <span class="post-date">@Model.PublishedAt.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("vi-VN"))</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="post-divider">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <div class="post-image">
+                        <img src="@Model.ImageUrl" alt="@Model.Title" />
+                    </div>
+                }
+
+                <div class="post-content">
+                    @Html.Raw(Model.Content.Replace("\n", "<br/>"))
+                </div>
+
+                <div class="post-actions">
+                    <a href="/Blog" class="btn-back">
+                        <i class="fas fa-arrow-left"></i> Quay lại Blog
+                    </a>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <footer class="blog-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <p>Thanks for <span class="highlight">coming!</span></p>
+                </div>
+                <div class="footer-center">
+                    <p>restaurantly@gmail.com</p>
+                </div>
+                <div class="footer-right">
+                    <button class="btn-back-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                        Back to top <i class="fas fa-arrow-up"></i>
+                    </button>
+                    <a href="#" class="social-icon" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-icon" aria-label="Medium">
+                        <i class="fab fa-medium"></i>
+                    </a>
+                    <a href="#" class="social-icon" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</section>
+
+<script src="~/js/blog.js" asp-append-version="true"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const themeToggle = document.getElementById('themeToggle');
+    const blogPage = document.getElementById('blogPage');
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem('blogTheme') || 'light';
+    if (savedTheme === 'dark') {
+        blogPage.classList.add('dark-mode');
+        themeToggle.checked = true;
+    }
+    
+    // Toggle theme
+    themeToggle.addEventListener('change', function() {
+        if (this.checked) {
+            blogPage.classList.add('dark-mode');
+            localStorage.setItem('blogTheme', 'dark');
+        } else {
+            blogPage.classList.remove('dark-mode');
+            localStorage.setItem('blogTheme', 'light');
+        }
+    });
+});
+</script>

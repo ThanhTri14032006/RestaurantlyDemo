@@ -1,0 +1,14 @@
+/* CSS riêng cho trang Admin/Bookings */
+
+.admin-content .table thead th {
+  background: #f1f5f9;
+}
+
+.badge-status-confirmed {
+  background-color: #198754;
+}
+
+.badge-status-pending {
+  background-color: #ffc107;
+  color: #000;
+}

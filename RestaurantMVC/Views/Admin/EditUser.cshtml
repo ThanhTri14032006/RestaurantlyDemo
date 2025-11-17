@@ -1,0 +1,171 @@
+@model RestaurantMVC.Models.User
+@{
+    ViewData["Title"] = "/Admin/EditUser";
+    Layout = "_AdminLayout";
+}
+
+<div class="admin-page">
+    <header class="admin-hero">
+        <div class="container">
+            <div class="hero-content d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="hero-title"><i class="fas fa-user-edit me-2"></i> Chỉnh sửa Người dùng</h1>
+                    <p class="lead">Cập nhật thông tin và trạng thái tài khoản</p>
+                </div>
+                <div class="hero-actions d-flex gap-2">
+                    <a href="@Url.Action("Users")" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">Chỉnh sửa Người dùng - @Model.FullName</h3>
+                    <a href="@Url.Action("Users")" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Quay lại
+                    </a>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="@Url.Action("EditUser")">
+                        <input type="hidden" name="Id" value="@Model.Id" />
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="FullName" class="form-label">Họ và tên <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="FullName" name="FullName" value="@Model.FullName" required />
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="Email" class="form-label">Email <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" required>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="Role" class="form-label">Vai trò <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="Role" name="Role" required>
+                                        @if (Model.Role == RestaurantMVC.Models.UserRole.Admin)
+                                        {
+                                            <option value="Admin" selected>Quản trị viên</option>
+                                            <option value="Customer">Khách hàng</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="Admin">Quản trị viên</option>
+                                            <option value="Customer" selected>Khách hàng</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Role" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="IsActive" name="IsActive" value="true" checked="@Model.IsActive" />
+                                        <label class="form-check-label" for="IsActive">
+                                            Tài khoản hoạt động
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Password Change Section -->
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h5 class="card-title">Đổi mật khẩu (tùy chọn)</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="NewPassword" class="form-label">Mật khẩu mới</label>
+                                            <input type="password" class="form-control" id="NewPassword" name="NewPassword" />
+                                            <div class="form-text">Để trống nếu không muốn đổi mật khẩu. Mật khẩu phải có ít nhất 6 ký tự</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- User Statistics -->
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h5 class="card-title">Thông tin thống kê</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="text-center">
+                                            <h6>Ngày tạo</h6>
+                                            <p>@Model.CreatedAt.ToString("dd/MM/yyyy")</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="text-center">
+                                            <h6>Cập nhật lần cuối</h6>
+                                            <p>@Model.UpdatedAt.ToString("dd/MM/yyyy")</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="text-center">
+                                            <h6>Tổng đơn hàng</h6>
+                                            <p>@ViewBag.TotalOrders</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="text-center">
+                                            <h6>Tổng đánh giá</h6>
+                                            <p>@ViewBag.TotalReviews</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Cập nhật
+                                </button>
+                                <a href="@Url.Action("Users")" class="btn btn-secondary">Hủy</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Password confirmation validation
+    const newPassword = document.getElementById('NewPassword');
+    const confirmNewPassword = document.getElementById('ConfirmNewPassword');
+    
+    function validatePassword() {
+        if (newPassword.value && newPassword.value !== confirmNewPassword.value) {
+            confirmNewPassword.setCustomValidity('Mật khẩu xác nhận không khớp');
+        } else {
+            confirmNewPassword.setCustomValidity('');
+        }
+    }
+    
+    newPassword.addEventListener('change', validatePassword);
+    confirmNewPassword.addEventListener('keyup', validatePassword);
+});
+</script>

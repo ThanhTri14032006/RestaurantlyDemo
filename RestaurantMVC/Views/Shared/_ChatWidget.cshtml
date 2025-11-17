@@ -1,0 +1,43 @@
+@* Floating customer chat widget *@
+<link rel="stylesheet" href="~/css/chat.css" asp-append-version="true" />
+<div id="chat-widget" class="chat-widget">
+    <button id="chat-toggle" class="chat-toggle btn btn-warning" title="Mở chat">
+        <i class="fas fa-comments"></i>
+    </button>
+    <div class="chat-panel card shadow">
+        <div class="chat-header">
+            <div class="chat-header-row">
+                <button class="chat-header-back" id="chat-close" title="Thu nhỏ"><i class="fas fa-chevron-left"></i></button>
+                <div class="chat-header-title">Chat with us</div>
+                <button class="chat-header-min" id="chat-min" title="Ẩn"><i class="fas fa-minus"></i></button>
+            </div>
+            <div class="chat-brand">
+                <div class="chat-avatar">photo</div>
+                <div class="chat-brand-text">
+                    <div class="chat-brand-name">Name</div>
+                    <div class="chat-brand-company">The Company Name</div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <div id="chat-messages" class="chat-messages"></div>
+        </div>
+        <div class="chat-footer">
+            <div class="chat-input-wrap">
+                <button class="chat-add" type="button" title="Tệp"><i class="fas fa-plus"></i></button>
+                <input id="chat-input" type="text" class="form-control" placeholder="Type your message here..." />
+                <button class="chat-emoji" type="button" title="Emoji"><i class="far fa-smile"></i></button>
+                <button id="chat-send" class="chat-send" title="Send"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/chat.js" asp-append-version="true"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        if (window.ChatWidget) {
+            window.ChatWidget.init();
+        }
+    });
+</script>

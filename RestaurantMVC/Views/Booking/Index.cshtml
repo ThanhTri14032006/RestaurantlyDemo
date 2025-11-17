@@ -1,0 +1,926 @@
+@{
+    ViewData["Title"] = "Đặt bàn";
+}
+
+<div class="booking-wrapper">
+    <section class="booking-hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <div class="hero-text fade-in">
+                <span class="eyebrow">Fine Dining Experience</span>
+                <h1>Đặt bàn cho khoảnh khắc đáng nhớ</h1>
+                <p>Trải nghiệm ẩm thực tinh tế với không gian sang trọng, phục vụ chu đáo và menu được tuyển chọn bởi bếp trưởng.</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="number">+150</span>
+                        <span class="label">Món chọn lọc</span>
+                    </div>
+                    <div class="stat">
+                        <span class="number">24/7</span>
+                        <span class="label">Hỗ trợ đặt bàn</span>
+                    </div>
+                    <div class="stat">
+                        <span class="number">5*</span>
+                        <span class="label">Phong cách phục vụ</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-highlight fade-in">
+                <div class="highlight-card">
+                    <i class="fas fa-champagne-glasses"></i>
+                    <div>
+                        <h4>Dành riêng cho bạn</h4>
+                        <p>Những bàn đẹp nhất được giữ trước cho khách đặt online.</p>
+                    </div>
+                </div>
+                <div class="highlight-card">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <h4>Hủy miễn phí</h4>
+                        <p>Thay đổi kế hoạch dễ dàng trước giờ đặt 1 giờ.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="booking-main">
+        <div class="container">
+            <div class="reservation-grid">
+                <div class="reservation-panel glass-card">
+                    <div class="panel-header">
+                        <div>
+                            <span class="panel-eyebrow">Luxury Reservation</span>
+                            <h2>Hoàn tất đặt bàn</h2>
+                        </div>
+                        <div class="step-badge">3 bước</div>
+                    </div>
+
+                    <div class="lux-stepper">
+                        <div class="lux-step active" data-step="1">
+                            <span class="step-index">01</span>
+                            <div>
+                                <h6>Chọn thời gian</h6>
+                                <p>Ngày, giờ và số khách</p>
+                            </div>
+                        </div>
+                        <div class="lux-step" data-step="2">
+                            <span class="step-index">02</span>
+                            <div>
+                                <h6>Thông tin liên hệ</h6>
+                                <p>Thông tin khách và liên hệ</p>
+                            </div>
+                        </div>
+                        <div class="lux-step" data-step="3">
+                            <span class="step-index">03</span>
+                            <div>
+                                <h6>Xác nhận</h6>
+                                <p>Kiểm tra và gửi yêu cầu</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="post" asp-action="Create" id="bookingForm" novalidate>
+                        <!-- Step 1: Date & Time -->
+                        <div class="form-step active" id="step1">
+                            <div class="step-title">
+                                <span class="icon"><i class="fas fa-calendar-days"></i></span>
+                                <div>
+                                    <h5>Chọn thời gian</h5>
+                                    <p>Đặt lịch phù hợp với bạn nhất</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="BookingDate" class="form-label">Ngày đặt bàn <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-calendar-day"></i></span>
+                                        <input type="date" class="form-control form-control-lg" id="BookingDate" name="BookingDate" 
+                                               min="@DateTime.Now.ToString("yyyy-MM-dd")" required>
+                                        <div class="invalid-feedback">Vui lòng chọn ngày đặt bàn</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="BookingTime" class="form-label">Giờ đặt bàn <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                        <select class="form-select form-select-lg" id="BookingTime" name="BookingTime" required>
+                                            <option value="">Chọn giờ</option>
+                                            <optgroup label="Buổi sáng">
+                                                <option value="10:00">10:00 - Sáng</option>
+                                                <option value="10:30">10:30 - Sáng</option>
+                                                <option value="11:00">11:00 - Sáng</option>
+                                                <option value="11:30">11:30 - Sáng</option>
+                                            </optgroup>
+                                            <optgroup label="Buổi trưa">
+                                                <option value="12:00">12:00 - Trưa</option>
+                                                <option value="12:30">12:30 - Trưa</option>
+                                                <option value="13:00">13:00 - Trưa</option>
+                                                <option value="13:30">13:30 - Trưa</option>
+                                                <option value="14:00">14:00 - Trưa</option>
+                                            </optgroup>
+                                            <optgroup label="Buổi tối">
+                                                <option value="17:00">17:00 - Tối</option>
+                                                <option value="17:30">17:30 - Tối</option>
+                                                <option value="18:00">18:00 - Tối</option>
+                                                <option value="18:30">18:30 - Tối</option>
+                                                <option value="19:00">19:00 - Tối</option>
+                                                <option value="19:30">19:30 - Tối</option>
+                                                <option value="20:00">20:00 - Tối</option>
+                                                <option value="20:30">20:30 - Tối</option>
+                                                <option value="21:00">21:00 - Tối</option>
+                                                <option value="21:30">21:30 - Tối</option>
+                                            </optgroup>
+                                        </select>
+                                        <div class="invalid-feedback">Vui lòng chọn giờ đặt bàn</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="PartySize" class="form-label">Số người <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-users"></i></span>
+                                    <select class="form-select form-select-lg" id="PartySize" name="PartySize" required>
+                                        <option value="">Chọn số người</option>
+                                        @for (int i = 1; i <= 20; i++)
+                                        {
+                                            <option value="@i">@i người</option>
+                                        }
+                                    </select>
+                                    <div class="invalid-feedback">Vui lòng chọn số người</div>
+                                </div>
+                            </div>
+
+                            <!-- Available Tables Display -->
+                            <div id="availableTables" class="mb-4" style="display: none;">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <span id="tableInfo">Có bàn trống cho thời gian này</span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-primary btn-lg px-4" onclick="nextStep(2)">
+                                    Tiếp theo <i class="fas fa-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Personal Information -->
+                        <div class="form-step" id="step2">
+                            <div class="step-title">
+                                <span class="icon"><i class="fas fa-user"></i></span>
+                                <div>
+                                    <h5>Thông tin liên hệ</h5>
+                                    <p>Đảm bảo chúng tôi có thể liên lạc với bạn</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="CustomerName" class="form-label">Họ và tên <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        <input type="text" class="form-control form-control-lg" id="CustomerName" name="CustomerName" required>
+                                        <div class="invalid-feedback">Vui lòng nhập họ và tên</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="Phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        <input type="tel" class="form-control form-control-lg" id="Phone" name="Phone" required pattern="[0-9]{10,11}">
+                                        <div class="invalid-feedback">Vui lòng nhập số điện thoại hợp lệ</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="Email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" class="form-control form-control-lg" id="Email" name="Email" required>
+                                    <div class="invalid-feedback">Vui lòng nhập email hợp lệ</div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-outline-secondary btn-lg px-4" onclick="prevStep(1)">
+                                    <i class="fas fa-arrow-left me-2"></i>Quay lại
+                                </button>
+                                <button type="button" class="btn btn-primary btn-lg px-4" onclick="nextStep(3)">
+                                    Tiếp theo <i class="fas fa-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Confirmation -->
+                        <div class="form-step" id="step3">
+                            <div class="step-title">
+                                <span class="icon"><i class="fas fa-bell-concierge"></i></span>
+                                <div>
+                                    <h5>Xác nhận đặt bàn</h5>
+                                    <p>Kiểm tra thông tin trước khi gửi</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Booking Summary -->
+                            <div class="booking-summary mb-4">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Tóm tắt đặt bàn</h6>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p><strong>Khách hàng:</strong> <span id="summaryName">-</span></p>
+                                                <p><strong>Điện thoại:</strong> <span id="summaryPhone">-</span></p>
+                                                <p><strong>Email:</strong> <span id="summaryEmail">-</span></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Ngày:</strong> <span id="summaryDate">-</span></p>
+                                                <p><strong>Giờ:</strong> <span id="summaryTime">-</span></p>
+                                                <p><strong>Số người:</strong> <span id="summaryPartySize">-</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @{
+                                var menuItems = (List<RestaurantMVC.Models.MenuItem>)(ViewBag.MenuItems ?? new List<RestaurantMVC.Models.MenuItem>());
+                            }
+                            @if (menuItems.Any())
+                            {
+                                <div class="menu-preview glass-subcard">
+                                    <div class="subcard-header">
+                                        <div>
+                                            <h6><i class="fas fa-utensils me-2"></i>Chọn món trước (tuỳ chọn)</h6>
+                                            <p>Nhà bếp sẽ chuẩn bị sẵn khi bạn đến</p>
+                                        </div>
+                                        <a href="@Url.Action("Index", "Menu")" class="link-arrow">Xem thực đơn đầy đủ <i class="fas fa-arrow-up-right-from-square"></i></a>
+                                    </div>
+                                    <div class="subcard-body">
+                                        <div class="row g-3">
+                                            @foreach (var item in menuItems)
+                                            {
+                                                <div class="col-md-6">
+                                                    <div class="menu-item-select">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input shadow-none menu-item-checkbox" type="checkbox" role="switch" id="mi_@item.Id" value="@item.Id" data-name="@item.Name" data-price="@item.Price">
+                                                            <label class="form-check-label" for="mi_@item.Id">@item.Name</label>
+                                                        </div>
+                                                        <span class="price">@item.Price.ToString("N0")₫</span>
+                                                        <input type="number" min="1" class="form-control form-control-sm qty-input" id="qty_@item.Id" value="1" />
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="selected-menu">
+                                            <small>Danh sách món đã chọn</small>
+                                            <div id="selectedMenuSummary" class="menu-tags"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="mb-4">
+                                <label for="SpecialRequests" class="form-label">Yêu cầu đặc biệt</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-comment"></i></span>
+                                    <textarea class="form-control" id="SpecialRequests" name="SpecialRequests" rows="3" 
+                                              placeholder="Ví dụ: Bàn gần cửa sổ, sinh nhật, kỷ niệm..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                                    <label class="form-check-label" for="agreeTerms">
+                                        Tôi đồng ý với <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal" class="text-primary-custom">điều khoản và điều kiện</a> <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="invalid-feedback">Vui lòng đồng ý với điều khoản</div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-outline-secondary btn-lg px-4" onclick="prevStep(2)">
+                                    <i class="fas fa-arrow-left me-2"></i>Quay lại
+                                </button>
+                                <button type="submit" class="btn btn-success btn-lg px-5" id="submitBtn">
+                                    <i class="fas fa-check me-2"></i>Xác nhận đặt bàn
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <aside class="info-sidebar">
+                    <div class="glass-card info-card">
+                        <div class="info-card-header">
+                            <span class="badge-icon"><i class="fas fa-clock"></i></span>
+                            <div>
+                                <h4>Giờ phục vụ</h4>
+                                <p>Lin linh hoạt cho mọi dịp</p>
+                            </div>
+                        </div>
+                        <div class="info-card-body">
+                            <div class="hours-grid">
+                                <div>
+                                    <span>Thứ 2 - Thứ 6</span>
+                                    <strong>10:00 - 22:00</strong>
+                                </div>
+                                <div>
+                                    <span>Thứ 7 - Chủ nhật</span>
+                                    <strong>09:00 - 23:00</strong>
+                                </div>
+                            </div>
+                            <div class="policy-list">
+                                <h6>Chính sách đặt bàn</h6>
+                                <ul>
+                                    <li><i class="fas fa-check"></i>Đặt trước tối thiểu 2 giờ</li>
+                                    <li><i class="fas fa-check"></i>Giữ bàn 15 phút</li>
+                                    <li><i class="fas fa-check"></i>Miễn phí hủy trước 1 giờ</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card info-card">
+                        <div class="info-card-header">
+                            <span class="badge-icon"><i class="fas fa-map-marker-alt"></i></span>
+                            <div>
+                                <h4>Liên hệ</h4>
+                                <p>Chúng tôi luôn sẵn sàng hỗ trợ</p>
+                            </div>
+                        </div>
+                        <div class="info-card-body contact">
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <div>
+                                    <span>Điện thoại</span>
+                                    <a href="tel:+84123456789">+84 123 456 789</a>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <span>Email</span>
+                                    <a href="mailto:booking@restaurantly.com">booking@restaurantly.com</a>
+                                </div>
+                            </div>
+                            <div class="contact-item address">
+                                <i class="fas fa-location-dot"></i>
+                                <div>
+                                    <span>Địa chỉ</span>
+                                    <p>123 Đường ABC, Quận 1, TP.HCM</p>
+                                </div>
+                            </div>
+                            <div class="map-preview">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.502688934941!2d106.70042357473999!3d10.772999959206915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f3f0c7e9f49%3A0xf4be31779042f2f5!2zMTIzIE5ndXnhu4VuIEh1w6FpLCBRdeG6rW4gMSwgVGjDoG5oIHBo4buRIEjDsm5nIE3DoGkgQmFuZw!5e0!3m2!1svi!2s!4v1708231234567" allowfullscreen="" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card info-card highlight">
+                        <div class="info-card-header">
+                            <span class="badge-icon"><i class="fas fa-search"></i></span>
+                            <div>
+                                <h4>Đã đặt bàn?</h4>
+                                <p>Kiểm tra trạng thái đặt bàn ngay</p>
+                            </div>
+                        </div>
+                        <div class="info-card-body">
+                            <p>Nhập email, số điện thoại hoặc mã đặt bàn để xem chi tiết.</p>
+                            <a href="@Url.Action("Check")" class="btn btn-lux-secondary w-100">
+                                <i class="fas fa-magnifying-glass me-2"></i>Kiểm tra đặt bàn
+                            </a>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Terms Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-primary text-white">
+                <h5 class="modal-title" id="termsModalLabel">
+                    <i class="fas fa-file-contract me-2"></i>Điều khoản và điều kiện
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-4">
+                    <h6 class="fw-bold text-primary-custom mb-3">
+                        <i class="fas fa-calendar-check me-2"></i>Chính sách đặt bàn:
+                    </h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <span>Khách hàng cần đặt bàn trước tối thiểu 2 giờ</span>
+                        </li>
+                        <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <span>Nhà hàng sẽ giữ bàn trong 15 phút kể từ giờ đặt</span>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                            <span>Sau 15 phút, bàn có thể được chuyển cho khách khác</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="mb-4">
+                    <h6 class="fw-bold text-primary-custom mb-3">
+                        <i class="fas fa-times-circle me-2"></i>Chính sách hủy bàn:
+                    </h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <span>Miễn phí hủy bàn trước 1 giờ so với giờ đặt</span>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                            <span>Hủy bàn trong vòng 1 giờ có thể bị tính phí</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="mb-4">
+                    <h6 class="fw-bold text-primary-custom mb-3">
+                        <i class="fas fa-rules me-2"></i>Quy định khác:
+                    </h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-info-circle text-info me-2"></i>
+                            <span>Nhà hàng có quyền từ chối phục vụ trong một số trường hợp đặc biệt</span>
+                        </li>
+                        <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-tshirt text-info me-2"></i>
+                            <span>Khách hàng vui lòng tuân thủ quy định về trang phục</span>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <i class="fas fa-smoking-ban text-danger me-2"></i>
+                            <span>Không hút thuốc trong khu vực nhà hàng</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Lưu ý:</strong> Bằng việc đặt bàn, bạn đồng ý tuân thủ các điều khoản trên.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Đóng
+                </button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="document.getElementById('agreeTerms').checked = true;">
+                    <i class="fas fa-check me-2"></i>Đồng ý
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+ 
+
+<script>
+let currentStep = 1;
+const totalSteps = 3;
+
+// Initialize form
+document.addEventListener('DOMContentLoaded', function() {
+    // Set minimum date to today
+    const bookingDateInput = document.getElementById('BookingDate');
+    if (bookingDateInput) {
+        bookingDateInput.min = new Date().toISOString().split('T')[0];
+    }
+    
+    // Add form validation
+    const form = document.getElementById('bookingForm');
+    if (form) {
+        form.addEventListener('submit', handleFormSubmit);
+    }
+    
+    // Add real-time validation
+    addRealTimeValidation();
+    
+    // Add table availability check
+    addTableAvailabilityCheck();
+    
+    // Initialize multi-step form
+    initializeMultiStepForm();
+});
+
+function initializeMultiStepForm() {
+    // Check if we have the multi-step elements
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    
+    if (step1 && step2 && step3) {
+        // Initialize first step
+        step1.classList.add('active');
+        const firstStepIndicator = document.querySelector('[data-step="1"]');
+        if (firstStepIndicator) {
+            firstStepIndicator.classList.add('active');
+        }
+        
+        // Add event listeners for navigation buttons
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', nextStep);
+        }
+        if (prevBtn) {
+            prevBtn.addEventListener('click', prevStep);
+        }
+        if (submitBtn) {
+            submitBtn.addEventListener('click', handleFormSubmit);
+        }
+    }
+}
+
+function nextStep(step) {
+    if (validateCurrentStep()) {
+        // Update summary if moving to step 3
+        if (step === 3) {
+            updateBookingSummary();
+        }
+        
+        // Hide current step
+        const currentStepElement = document.getElementById(`step${currentStep}`);
+        if (currentStepElement) {
+            currentStepElement.classList.remove('active');
+        }
+        
+        const currentStepIndicator = document.querySelector(`[data-step="${currentStep}"]`);
+        if (currentStepIndicator) {
+            currentStepIndicator.classList.remove('active');
+            currentStepIndicator.classList.add('completed');
+        }
+        
+        // Show next step
+        currentStep = step;
+        const nextStepElement = document.getElementById(`step${currentStep}`);
+        if (nextStepElement) {
+            nextStepElement.classList.add('active');
+        }
+        
+        const nextStepIndicator = document.querySelector(`[data-step="${currentStep}"]`);
+        if (nextStepIndicator) {
+            nextStepIndicator.classList.add('active');
+        }
+        
+        // Update step lines
+        updateStepLines();
+        
+        // Scroll to top of form
+        const bookingCard = document.querySelector('.booking-card');
+        if (bookingCard) {
+            bookingCard.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+}
+
+function prevStep(step) {
+    // Hide current step
+    const currentStepElement = document.getElementById(`step${currentStep}`);
+    if (currentStepElement) {
+        currentStepElement.classList.remove('active');
+    }
+    
+    const currentStepIndicator = document.querySelector(`[data-step="${currentStep}"]`);
+    if (currentStepIndicator) {
+        currentStepIndicator.classList.remove('active');
+    }
+    
+    // Show previous step
+    currentStep = step;
+    const prevStepElement = document.getElementById(`step${currentStep}`);
+    if (prevStepElement) {
+        prevStepElement.classList.add('active');
+    }
+    
+    const prevStepIndicator = document.querySelector(`[data-step="${currentStep}"]`);
+    if (prevStepIndicator) {
+        prevStepIndicator.classList.add('active');
+    }
+    
+    // Update step status
+    const nextStepIndicator = document.querySelector(`[data-step="${currentStep + 1}"]`);
+    if (nextStepIndicator) {
+        nextStepIndicator.classList.remove('completed');
+    }
+    
+    // Update step lines
+    updateStepLines();
+    
+    // Scroll to top of form
+    const bookingCard = document.querySelector('.booking-card');
+    if (bookingCard) {
+        bookingCard.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+function updateStepLines() {
+    const stepLines = document.querySelectorAll('.step-line');
+    stepLines.forEach((line, index) => {
+        if (index < currentStep - 1) {
+            line.classList.add('completed');
+        } else {
+            line.classList.remove('completed');
+        }
+    });
+}
+
+function validateCurrentStep() {
+     const currentStepElement = document.getElementById('step' + currentStep);
+     const inputs = currentStepElement.querySelectorAll('input[required], select[required]');
+     let isValid = true;
+     
+     inputs.forEach(input => {
+         if (!validateField(input)) {
+             isValid = false;
+         }
+     });
+     
+     // Bổ sung kiểm tra cho bước 1 (Thời gian)
+     if (currentStep === 1) {
+         const bookingDate = document.getElementById('BookingDate').value;
+         const bookingTime = document.getElementById('BookingTime').value;
+         
+         if (bookingDate && bookingTime) {
+             const selectedDateTime = new Date(bookingDate + 'T' + bookingTime);
+             const now = new Date();
+             const twoHoursFromNow = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+             
+             if (selectedDateTime < twoHoursFromNow) {
+                 showAlert('Vui lòng đặt bàn trước ít nhất 2 giờ!', 'warning');
+                 isValid = false;
+             }
+         }
+     }
+     
+     if (!isValid) {
+         showAlert('Vui lòng điền đầy đủ thông tin hợp lệ!', 'danger');
+     }
+     
+     return isValid;
+ }
+
+function updateBookingSummary() {
+    const nameInput = document.getElementById('CustomerName');
+    const phoneInput = document.getElementById('Phone');
+    const emailInput = document.getElementById('Email');
+    const dateInput = document.getElementById('BookingDate');
+    const timeInput = document.getElementById('BookingTime');
+    const partySizeInput = document.getElementById('PartySize');
+    
+    const name = nameInput ? nameInput.value : '';
+    const phone = phoneInput ? phoneInput.value : '';
+    const email = emailInput ? emailInput.value : '';
+    const date = dateInput ? dateInput.value : '';
+    const time = timeInput ? timeInput.value : '';
+    const partySize = partySizeInput ? partySizeInput.value : '';
+    
+    const summaryName = document.getElementById('summaryName');
+    const summaryPhone = document.getElementById('summaryPhone');
+    const summaryEmail = document.getElementById('summaryEmail');
+    const summaryDate = document.getElementById('summaryDate');
+    const summaryTime = document.getElementById('summaryTime');
+    const summaryPartySize = document.getElementById('summaryPartySize');
+    
+    if (summaryName) summaryName.textContent = name || 'Chưa nhập';
+    if (summaryPhone) summaryPhone.textContent = phone || 'Chưa nhập';
+    if (summaryEmail) summaryEmail.textContent = email || 'Chưa nhập';
+    if (summaryDate) summaryDate.textContent = date ? new Date(date).toLocaleDateString('vi-VN') : 'Chưa chọn';
+    if (summaryTime) summaryTime.textContent = time || 'Chưa chọn';
+    if (summaryPartySize) summaryPartySize.textContent = partySize ? partySize + ' người' : 'Chưa chọn';
+}
+
+function addRealTimeValidation() {
+    const inputs = document.querySelectorAll('input, select');
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            validateField(this);
+        });
+        
+        input.addEventListener('input', function() {
+            if (this.classList.contains('is-invalid')) {
+                validateField(this);
+            }
+        });
+    });
+}
+
+function validateField(field) {
+    const value = field.value.trim();
+    
+    if (field.hasAttribute('required') && !value) {
+        field.classList.add('is-invalid');
+        field.classList.remove('is-valid');
+        return false;
+    }
+    
+    // Specific validations
+    if (field.type === 'email' && value) {
+        // Simple email validation
+        var atChar = '@@';
+        if (!value.includes(atChar) || !value.includes('.') || value.indexOf(atChar) === 0 || value.indexOf(atChar) === value.length - 1) {
+            field.classList.add('is-invalid');
+            field.classList.remove('is-valid');
+            return false;
+        }
+    }
+    
+    if (field.type === 'tel' && value) {
+        const phoneRegex = /^[0-9]{10,11}$/;
+        if (!phoneRegex.test(value)) {
+            field.classList.add('is-invalid');
+            field.classList.remove('is-valid');
+            return false;
+        }
+    }
+    
+    field.classList.remove('is-invalid');
+    field.classList.add('is-valid');
+    return true;
+}
+
+function addTableAvailabilityCheck() {
+    const dateInput = document.getElementById('BookingDate');
+    const timeInput = document.getElementById('BookingTime');
+    const partySizeInput = document.getElementById('PartySize');
+    
+    function checkAvailability() {
+        const date = dateInput.value;
+        const time = timeInput.value;
+        const partySize = partySizeInput.value;
+        
+        if (date && time && partySize) {
+            // Simulate table availability check
+            setTimeout(() => {
+                const availableTables = document.getElementById('availableTables');
+                const tableInfo = document.getElementById('tableInfo');
+                
+                // Simple simulation - in real app, this would be an API call
+                const isAvailable = Math.random() > 0.2; // 80% chance of availability
+                
+                if (isAvailable) {
+                    tableInfo.textContent = `Có bàn trống cho ${partySize} người vào ${time} ngày ${new Date(date).toLocaleDateString('vi-VN')}`;
+                    availableTables.className = 'alert alert-success mb-4';
+                    availableTables.innerHTML = `<i class="fas fa-check-circle me-2"></i>${tableInfo.textContent}`;
+                } else {
+                    availableTables.className = 'alert alert-warning mb-4';
+                    availableTables.innerHTML = `<i class="fas fa-exclamation-triangle me-2"></i>Thời gian này đã kín bàn. Vui lòng chọn thời gian khác.`;
+                }
+                
+                availableTables.style.display = 'block';
+            }, 500);
+        }
+    }
+    
+    dateInput.addEventListener('change', checkAvailability);
+    timeInput.addEventListener('change', checkAvailability);
+    partySizeInput.addEventListener('change', checkAvailability);
+}
+
+function handleFormSubmit(e) {
+    e.preventDefault();
+    
+    // Final validation
+    if (!validateCurrentStep()) {
+        return false;
+    }
+    
+    // Check terms agreement
+    if (!document.getElementById('agreeTerms').checked) {
+        showAlert('Vui lòng đồng ý với điều khoản và điều kiện!', 'danger');
+        return false;
+    }
+
+    // Compose selected menu items into SpecialRequests
+    composeSelectedMenuIntoNotes();
+    
+    // Show loading state
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+    
+    // Simulate form submission delay
+    setTimeout(() => {
+        // Get the form element properly
+        const form = document.getElementById('bookingForm');
+        if (form) {
+            form.submit();
+        }
+    }, 1000);
+}
+
+function getSelectedMenuItems() {
+    const selected = [];
+    document.querySelectorAll('.menu-item-checkbox:checked').forEach(cb => {
+        const id = cb.value;
+        const name = cb.dataset.name || '';
+        const qtyInput = document.getElementById(`qty_${id}`);
+        const qty = qtyInput ? Math.max(1, parseInt(qtyInput.value || '1')) : 1;
+        selected.push({ id, name, qty });
+    });
+    return selected;
+}
+
+function updateSelectedMenuSummary() {
+    const wrap = document.getElementById('selectedMenuSummary');
+    if (!wrap) return;
+    const selected = getSelectedMenuItems();
+    if (!selected.length) {
+        wrap.innerHTML = '<span class="text-muted">Chưa chọn món nào</span>';
+        return;
+    }
+    const html = selected.map(s => `<span class="badge bg-light text-dark me-2 mb-2">${s.name} (x${s.qty})</span>`).join('');
+    wrap.innerHTML = html;
+}
+
+function composeSelectedMenuIntoNotes() {
+    const selected = getSelectedMenuItems();
+    const notesEl = document.getElementById('SpecialRequests');
+    if (!notesEl) return;
+    const userNotes = (notesEl.value || '').trim();
+    let prefix = '';
+    if (selected.length) {
+        const parts = selected.map(s => `${s.name} (x${s.qty})`);
+        prefix = `Món đã chọn: ${parts.join(', ')}.`;
+    }
+    if (prefix && userNotes) {
+        notesEl.value = `${prefix} Ghi chú: ${userNotes}`;
+    } else if (prefix) {
+        notesEl.value = prefix;
+    } else {
+        notesEl.value = userNotes; // no change if no selected
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Listen to menu selection changes
+    document.querySelectorAll('.menu-item-checkbox').forEach(cb => {
+        cb.addEventListener('change', updateSelectedMenuSummary);
+    });
+    document.querySelectorAll('[id^="qty_"]').forEach(inp => {
+        inp.addEventListener('change', updateSelectedMenuSummary);
+        inp.addEventListener('input', updateSelectedMenuSummary);
+    });
+    // Initialize summary
+    updateSelectedMenuSummary();
+});
+
+function showAlert(message, type) {
+    // Create alert element
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+    alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    alert.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(alert);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (alert.parentNode) {
+            alert.remove();
+        }
+    }, 5000);
+}
+
+// Fade in animation for elements
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const fadeElements = document.querySelectorAll('.fade-in');
+    fadeElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+});
+</script>

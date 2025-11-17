@@ -1,0 +1,96 @@
+@model RestaurantMVC.Models.Booking
+@{
+    ViewData["Title"] = $"Chi tiết đặt bàn #{Model.Id}";
+    Layout = "_AdminLayout";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h4 mb-0">
+            <i class="fas fa-calendar-check me-2 text-primary"></i>
+            Chi tiết đặt bàn #@Model.Id
+        </h1>
+        <div>
+            <a href="@Url.Action("Bookings", "Admin")" class="btn btn-secondary"><i class="fas fa-arrow-left me-2"></i>Quay lại danh sách</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-light">
+                    <strong>Thông tin khách hàng</strong>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2"><strong>Họ tên:</strong> @Model.CustomerName</div>
+                    <div class="mb-2"><strong>Email:</strong> @Model.Email</div>
+                    <div class="mb-2"><strong>Số điện thoại:</strong> @Model.Phone</div>
+                    <div class="mb-2"><strong>Ngày tạo:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</div>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-light">
+                    <strong>Thông tin đặt bàn</strong>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2"><strong>Ngày đặt:</strong> @Model.BookingDate.ToString("dd/MM/yyyy")</div>
+                    <div class="mb-2"><strong>Giờ đặt:</strong> @Model.BookingTime.ToString("HH:mm")</div>
+                    <div class="mb-2"><strong>Số người:</strong> @Model.PartySize</div>
+                    <div class="mb-2"><strong>Yêu cầu đặc biệt:</strong> @(string.IsNullOrWhiteSpace(Model.SpecialRequests) ? "(Không)" : Model.SpecialRequests)</div>
+                    <div class="mb-2"><strong>Trạng thái:</strong> @Model.Status</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-light">
+                    <strong>Ghi chú Admin</strong>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateBookingNotes" asp-controller="Admin" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <div class="mb-3">
+                            <textarea name="adminNotes" class="form-control" rows="5" placeholder="Nhập ghi chú...">@Model.AdminNotes</textarea>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <a href="@Url.Action("Bookings", "Admin")" class="btn btn-outline-secondary">Danh sách</a>
+                                <a href="@Url.Action("BookingDetails", "Admin", new { id = Model.Id })" class="btn btn-outline-primary">Tải lại</a>
+                            </div>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save me-2"></i>Lưu ghi chú</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header bg-light">
+                    <strong>Cập nhật trạng thái</strong>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <form asp-action="UpdateBookingStatus" asp-controller="Admin" method="post" class="d-grid gap-2">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <div class="btn-group" role="group">
+                                <button name="status" value="Pending" type="submit" class="btn btn-warning">Chờ xác nhận</button>
+                                <button name="status" value="Confirmed" type="submit" class="btn btn-primary">Đã xác nhận</button>
+                                <button name="status" value="Cancelled" type="submit" class="btn btn-danger">Đã hủy</button>
+                                <button name="status" value="Completed" type="submit" class="btn btn-success">Hoàn thành</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Có thể thêm JS phụ trợ nếu cần
+    </script>
+}

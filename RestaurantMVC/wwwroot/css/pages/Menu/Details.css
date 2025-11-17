@@ -1,0 +1,130 @@
+/* Trang chi tiết món ăn (frontend khách hàng) */
+
+/* Nền trắng, chữ đen */
+.details-page {
+  background: #ffffff;
+  color: #111111;
+}
+.details-page .section-title,
+.details-page h1,
+.details-page h3,
+.details-page h5 {
+  color: #111111;
+}
+.details-page h1.display-5 {
+  text-shadow: 0 1px 0 rgba(255,255,255,0.6), 0 8px 24px rgba(13,110,253,0.15);
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  background: transparent;
+  margin-bottom: 1rem;
+}
+.breadcrumb .breadcrumb-item a {
+  text-decoration: none;
+}
+
+/* Ảnh món ăn */
+.img-fluid.rounded.shadow {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
+}
+
+/* Giá và badge trạng thái */
+.details-page .h2.text-primary {
+  color: #111111 !important;
+  text-shadow: none;
+}
+.badge.bg-success, .badge.bg-danger, .badge.bg-primary {
+  border-radius: 999px;
+  padding: 6px 12px;
+  box-shadow: 0 6px 20px rgba(13,110,253,0.15);
+}
+.badge.bg-primary {
+  background: linear-gradient(90deg, #4cc9f0, #0d6efd) !important;
+}
+.badge.bg-success {
+  background: linear-gradient(90deg, #38b000, #70e000) !important;
+}
+.badge.bg-danger {
+  background: linear-gradient(90deg, #ef233c, #ff5d8f) !important;
+}
+
+/* Form đánh giá sao */
+.rating-input {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+.rating-input input[type="radio"] {
+  display: none;
+}
+.rating-input label {
+  font-size: 24px;
+  color: #c7ccd1;
+  cursor: pointer;
+  transition: color .2s ease;
+}
+.rating-input label:hover,
+.rating-input label.active {
+  color: #f2b01e;
+}
+/* Hiển thị nhãn đã chọn (đánh dấu sao hiện tại) */
+#star1:checked ~ label[for="star1"],
+#star2:checked ~ label[for="star2"],
+#star3:checked ~ label[for="star3"],
+#star4:checked ~ label[for="star4"],
+#star5:checked ~ label[for="star5"] {
+  color: #f2b01e;
+}
+
+/* Hiển thị đánh giá trung bình và danh sách đánh giá */
+.rating-display i {
+  margin-right: 2px;
+}
+
+/* Spinner tải đánh giá */
+.loading-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(13,110,253,0.25);
+  border-top-color: #0d6efd;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Khu vực liên quan và CTA */
+.bg-light.p-4.rounded {
+  border-radius: 12px !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+}
+
+/* Nút hành động nổi bật */
+.details-page .btn-primary {
+  background: linear-gradient(90deg, #00d4ff, #4cc9f0);
+  border: none;
+  color: #003049;
+  box-shadow: 0 10px 24px rgba(76,201,240,0.35);
+}
+.details-page .btn-primary:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 12px 28px rgba(76,201,240,0.45);
+}
+.details-page .btn-outline-secondary.btn-lg {
+  border-color: #9ec1ff;
+  color: #0d6efd;
+}
+.details-page .btn-outline-secondary.btn-lg:hover {
+  background: #e9f2ff;
+}
+
+/* Nút chia sẻ */
+.btn.btn-outline-primary.btn-sm,
+.btn.btn-outline-info.btn-sm {
+  border-radius: 999px;
+}

@@ -1,0 +1,219 @@
+@{
+    Layout = null;
+    var title = ViewData["Title"] ?? "Admin";
+}
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@title - Admin</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    @{
+        var _controller = ViewContext.RouteData.Values["controller"]?.ToString(); var _action =
+        ViewContext.RouteData.Values["action"]?.ToString(); var _pageCssHref =
+        Url.Content($"~/css/pages/{_controller}/{_action}.css");
+    }
+    <link rel="stylesheet" href="@_pageCssHref" asp-append-version="true" />
+    <style>
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .admin-sidebar {
+            width: 260px;
+            background: #0f172a;
+            color: #cbd5e1;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .admin-sidebar .brand {
+            font-weight: 700;
+            font-size: 20px;
+            color: #fff;
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .admin-sidebar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            border-radius: 8px;
+            margin: 4px 12px;
+        }
+
+        .admin-sidebar a:hover,
+        .admin-sidebar a.active {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+        }
+
+        .admin-sidebar i {
+            margin-left: 8px;
+        }
+
+        .admin-main {
+            flex: 1;
+            background: #f8fafc;
+        }
+
+        .admin-topbar {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .admin-content {
+            padding: 20px;
+        }
+
+        @@media (max-width: 991px) {
+            .admin-sidebar {
+                position: fixed;
+                left: -270px;
+                transition: left .25s ease;
+            }
+
+            .admin-sidebar.open {
+                left: 0;
+            }
+
+            .admin-main {
+                padding-right: 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="admin-page">
+    <div class="admin-layout">
+        <nav class="admin-sidebar" id="adminSidebar">
+            <div class="brand d-flex align-items-center justify-content-between">
+                <span><i class="fas fa-gauge-high me-2"></i>Admin</span>
+                <button class="btn btn-sm btn-outline-light d-lg-none" id="toggleSidebar"><i
+                        class="fas fa-bars"></i></button>
+            </div>
+            <div class="mt-2">
+                <a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"
+                    href="@Url.Action("Index", "Admin")"><i class="fas fa-gauge-high ms-2"></i><span
+                        class="ms-2">Dashboard</span></a>
+                <a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Menu" ? "active" : "")"
+                    href="@Url.Action("Menu", "Admin")"><i class="fas fa-utensils ms-2"></i><span
+                        class="ms-2">Menu</span></a>
+                <a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Bookings" ? "active" : "")"
+                    href="@Url.Action("Bookings", "Admin")"><i class="fas fa-calendar-check ms-2"></i><span
+                        class="ms-2">Bookings</span></a>
+                <a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Users" ? "active" : "")"
+                    href="@Url.Action("Users", "Admin")"><i class="fas fa-users ms-2"></i><span
+                        class="ms-2">Users</span></a>
+                <a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Reviews" ? "active" : "")"
+                    href="@Url.Action("Reviews", "Admin")"><i class="fas fa-star ms-2"></i><span
+                        class="ms-2">Reviews</span></a>
+                <a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Blog" ? "active" : "")"
+                    href="@Url.Action("Blog", "Admin")"><i class="fas fa-blog ms-2"></i><span
+                        class="ms-2">BlogDashBoard</span></a>
+                <a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "AboutSettings" ? "active" : "")"
+                    href="@Url.Action("AboutSettings", "Admin")"><i class="fas fa-gear ms-2"></i><span
+                        class="ms-2">AboutDashboard</span></a>
+                <a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Chat" ? "active" : "")"
+                    href="@Url.Action("Chat", "Admin")"><i class="fas fa-comments ms-2"></i><span
+                        class="ms-2">Chat</span></a>
+                <a class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "DbDiagnostics" ? "active" : "")"
+                    href="@Url.Action("Index", "DbDiagnostics")"><i class="fas fa-database ms-2"></i><span
+                        class="ms-2">Diagnostics</span></a>
+                <hr class="mx-3" />
+                <a href="@Url.Action("Logout", "Account")"><i class="fas fa-right-from-bracket ms-2"></i><span
+                        class="ms-2">Sign Out</span></a>
+            </div>
+        </nav>
+        <div class="admin-main">
+            <div class="admin-topbar">
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-secondary d-lg-none me-2" id="openSidebar"><i
+                            class="fas fa-bars"></i></button>
+                    <h1 class="h5 mb-0">@title</h1>
+                </div>
+                <div class="d-flex align-items-center">
+                    <a href="/" class="btn btn-sm btn-light me-2"><i class="fas fa-home"></i></a>
+                    <span class="text-muted small">@DateTime.Now.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+            </div>
+            <div class="admin-content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        (function () {
+            const s = document.getElementById('adminSidebar');
+            const t = document.getElementById('toggleSidebar');
+            const o = document.getElementById('openSidebar');
+            if (t) { t.addEventListener('click', function () { s.classList.toggle('open'); }); }
+            if (o) { o.addEventListener('click', function () { s.classList.toggle('open'); }); }
+        })();
+    </script>
+    @* Hiển thị thông báo từ TempData cho layout Admin *@
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                if (typeof showNotification === 'function') {
+                    showNotification('@TempData["SuccessMessage"]', 'success');
+                }
+            });
+        </script>
+    }
+    @if (TempData["Success"] != null)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                if (typeof showNotification === 'function') {
+                    showNotification('@TempData["Success"]', 'success');
+                }
+            });
+        </script>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                if (typeof showNotification === 'function') {
+                    showNotification('@TempData["ErrorMessage"]', 'error');
+                }
+            });
+        </script>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                if (typeof showNotification === 'function') {
+                    showNotification('@TempData["Error"]', 'error');
+                }
+            });
+        </script>
+    }
+    @RenderSection("Scripts", required: false)
+</body>
+
+</html>

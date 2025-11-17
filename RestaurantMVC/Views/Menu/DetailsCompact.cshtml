@@ -1,0 +1,95 @@
+@model RestaurantMVC.Models.MenuItem
+@{
+  ViewData["Title"] = Model?.Name ?? "Chi tiết món";
+}
+
+<link rel="stylesheet" href="~/css/menu.css" asp-append-version="true" />
+<style>
+  .menu-compact { background:#0c0d10; color:#e8e8ea; padding:40px 0; }
+  .compact-card { max-width:860px; margin:0 auto; display:grid; grid-template-columns: 1.2fr 1fr; gap:20px; background:#131417; border:1px solid #23242a; border-radius:16px; overflow:hidden; }
+  .compact-image { height:100%; min-height:320px; background:#0c0d10; }
+  .compact-image img { width:100%; height:100%; object-fit:cover; }
+  .compact-body { padding:24px; display:flex; flex-direction:column; gap:12px; }
+  .compact-title { font-size:26px; font-weight:700; }
+  .compact-price { font-weight:700; color:#121317; background: linear-gradient(135deg, var(--menu-accent), var(--menu-accent-soft)); padding:6px 12px; border-radius:999px; display:inline-block; }
+  .compact-desc { color:#a6a7ab; }
+  .compact-actions { display:flex; gap:12px; margin-top:8px; }
+  .btn-primary-soft { background: var(--menu-accent); color:#121317; border:0; padding:10px 16px; border-radius:10px; font-weight:700; }
+  .btn-outline { border:1px solid var(--menu-divider); color:#e8e8ea; padding:10px 16px; border-radius:10px; background: transparent; }
+  .compact-meta { display:flex; gap:16px; color:#a6a7ab; font-size:0.95rem; }
+  @@media (max-width: 768px) {
+    .compact-card { grid-template-columns: 1fr; }
+    .compact-image { min-height:220px; }
+  }
+</style>
+
+<section class="menu-compact">
+  <div class="container">
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Index","Menu")">Thực đơn</a></li>
+        <li class="breadcrumb-item active">@Model?.Name</li>
+      </ol>
+    </nav>
+
+    @if (Model != null)
+    {
+      <div class="compact-card">
+        <div class="compact-image">
+          <img src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'><rect width='100%25' height='100%25' fill='%23f0f0f0'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23999' font-size='24'>No Image</text></svg>" : Model.ImageUrl)"
+               alt="@Model.Name"
+               onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'600\'><rect width=\'100%25\' height=\'100%25\' fill=\'%23f0f0f0\'/><text x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23999\' font-size=\'24\'>No Image</text></svg>';" />
+        </div>
+        <div class="compact-body">
+          <div class="compact-title">@Model.Name</div>
+          <div class="compact-price">@Model.Price.ToString("N0") ₫</div>
+          <div class="compact-desc">@(!string.IsNullOrWhiteSpace(Model.Description) ? Model.Description : Model.Category)</div>
+          <div class="compact-meta">
+            <div><i class="fas fa-tag me-2"></i>@Model.Category</div>
+            <div><i class="fas fa-check me-2"></i>@(Model.IsAvailable ? "Đang phục vụ" : "Tạm ngưng")</div>
+          </div>
+          <div class="compact-actions">
+            <button type="button" class="btn-primary-soft" id="addToCartCompact"><i class="fas fa-shopping-cart me-2"></i>Thêm vào giỏ</button>
+            <a class="btn-outline" href="@Url.Action("Index","Booking")"><i class="fas fa-calendar-alt me-2"></i>Đặt bàn</a>
+            <a class="btn-outline" href="@Url.Action("Index","Menu")"><i class="fas fa-arrow-left me-2"></i>Quay lại</a>
+          </div>
+        </div>
+      </div>
+    }
+    else
+    {
+      <div class="alert alert-warning">Không tìm thấy món ăn.</div>
+    }
+  </div>
+</section>
+@if (Model != null)
+{
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('addToCartCompact');
+    if (btn) {
+      btn.addEventListener('click', function() {
+        fetch('/Order/AddToCart', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ MenuItemId: @Model.Id, Quantity: 1 })
+        })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            showNotification('Đã thêm vào giỏ hàng', 'success');
+            window.location.href = '/Order/Cart';
+          } else {
+            showNotification('Không thể thêm vào giỏ: ' + (data.message || ''), 'error');
+          }
+        })
+        .catch(err => {
+          console.error('AddToCart error:', err);
+          showNotification('Có lỗi xảy ra khi thêm vào giỏ', 'error');
+        });
+      });
+    }
+  });
+</script>
+}

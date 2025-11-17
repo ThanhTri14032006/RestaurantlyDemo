@@ -1,0 +1,124 @@
+@{
+    ViewData["Title"] = "Về chúng tôi";
+}
+
+<link rel="stylesheet" href="~/css/pages/About.css" asp-append-version="true" />
+
+<section class="about-page">
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 fw-bold mb-4">@((ViewBag.AboutTitle ?? "Về Restaurantly") as string)</h1>
+            <p class="lead">@((ViewBag.AboutLead ?? "Câu chuyện về hành trình mang đến những trải nghiệm ẩm thực tuyệt vời") as string)</p>
+        </div>
+    </div>
+
+    <!-- Story Section -->
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6">
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3" 
+                 class="img-fluid rounded shadow" alt="Nhà hàng Restaurantly">
+        </div>
+        <div class="col-lg-6">
+            <h2 class="h3 fw-bold mb-4">Câu chuyện của chúng tôi</h2>
+            <p class="mb-3">@((ViewBag.AboutStory1 ?? "Restaurantly được thành lập vào năm 2020...") as string)</p>
+            <p class="mb-3">@((ViewBag.AboutStory2 ?? "Chúng tôi tin rằng mỗi bữa ăn...") as string)</p>
+            <p>@((ViewBag.AboutStory3 ?? "Với đội ngũ đầu bếp giàu kinh nghiệm...") as string)</p>
+        </div>
+    </div>
+
+    <!-- Values Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center fw-bold mb-5">Giá trị cốt lõi</h2>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="text-center">
+                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                     style="width: 80px; height: 80px;">
+                    <i class="fas fa-leaf fa-2x"></i>
+                </div>
+                <h4>Tươi ngon</h4>
+                <p>Sử dụng nguyên liệu tươi ngon, được chọn lọc kỹ càng từ các nhà cung cấp uy tín</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="text-center">
+                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                     style="width: 80px; height: 80px;">
+                    <i class="fas fa-users fa-2x"></i>
+                </div>
+                <h4>Phục vụ tận tâm</h4>
+                <p>Đội ngũ nhân viên được đào tạo chuyên nghiệp, luôn sẵn sàng phục vụ với thái độ nhiệt tình</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="text-center">
+                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                     style="width: 80px; height: 80px;">
+                    <i class="fas fa-award fa-2x"></i>
+                </div>
+                <h4>Chất lượng</h4>
+                <p>Cam kết duy trì chất lượng cao trong từng món ăn và dịch vụ khách hàng</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center fw-bold mb-5">Đội ngũ của chúng tôi</h2>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body p-4">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&w=150&h=150&fit=crop&crop=face" 
+                         class="rounded-circle mb-3" alt="Chef Nguyễn Văn A" width="100" height="100">
+                    <h5 class="card-title">Chef Nguyễn Văn A</h5>
+                    <p class="text-muted">Bếp trưởng</p>
+                    <p class="card-text">Với hơn 15 năm kinh nghiệm trong ngành ẩm thực, Chef A là người đứng sau những món ăn đặc sắc của nhà hàng.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body p-4">
+                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&w=150&h=150&fit=crop&crop=face" 
+                         class="rounded-circle mb-3" alt="Trần Thị B" width="100" height="100">
+                    <h5 class="card-title">Trần Thị B</h5>
+                    <p class="text-muted">Quản lý nhà hàng</p>
+                    <p class="card-text">Với kinh nghiệm quản lý lâu năm, chị B đảm bảo mọi hoạt động của nhà hàng diễn ra suôn sẻ.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body p-4">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&w=150&h=150&fit=crop&crop=face" 
+                         class="rounded-circle mb-3" alt="Lê Văn C" width="100" height="100">
+                    <h5 class="card-title">Lê Văn C</h5>
+                    <p class="text-muted">Trưởng phòng phục vụ</p>
+                    <p class="card-text">Anh C và đội ngũ phục vụ luôn đảm bảo khách hàng có những trải nghiệm tuyệt vời nhất.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact CTA -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="bg-light p-5 rounded">
+                <h3 class="fw-bold mb-3">Liên hệ với chúng tôi</h3>
+                <p class="mb-4">Bạn có câu hỏi hoặc muốn biết thêm thông tin? Chúng tôi luôn sẵn sàng lắng nghe!</p>
+                <a href="@Url.Action("Contact")" class="btn btn-primary btn-lg me-3">
+                    <i class="fas fa-envelope me-2"></i>Liên hệ
+                </a>
+                <a href="@Url.Action("Index", "Booking")" class="btn btn-warning btn-lg">
+                    <i class="fas fa-calendar-alt me-2"></i>Đặt bàn
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</section>

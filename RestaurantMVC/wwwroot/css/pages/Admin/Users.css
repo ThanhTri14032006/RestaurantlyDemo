@@ -1,0 +1,11 @@
+/* CSS riêng cho trang Admin/Users */
+
+.admin-content .card-header {
+  background: #f8fafc;
+}
+
+.user-role-badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: .85rem;
+}

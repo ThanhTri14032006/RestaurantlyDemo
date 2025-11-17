@@ -1,0 +1,674 @@
+@{
+    ViewData["Title"] = "Kiểm tra đặt bàn";
+    var bookings = ViewBag.Bookings as List<RestaurantMVC.Models.Booking> ?? new List<RestaurantMVC.Models.Booking>();
+    var status = ViewBag.Status as string ?? "form";
+    var searchType = ViewBag.SearchType as string ?? "email";
+    var hasError = ViewBag.HasError as bool? ?? false;
+}
+
+<style>
+    .check-reservation-page {
+        min-height: 100vh;
+        position: relative;
+        background: linear-gradient(rgba(12, 11, 9, 0.85), rgba(12, 11, 9, 0.85)),
+                    url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1600&auto=format&fit=crop') center/cover;
+        background-attachment: fixed;
+        padding: 100px 0;
+    }
+
+    .check-reservation-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .check-reservation-title {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .check-reservation-title h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: #4a90e2;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .check-reservation-title p {
+        font-size: 1.2rem;
+        color: #b0b0b0;
+        margin: 0;
+    }
+
+    .check-reservation-content {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 40px;
+        margin-top: 40px;
+    }
+
+    .reservation-form-panel {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+
+    .search-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .search-tab {
+        padding: 12px 24px;
+        background: transparent;
+        border: none;
+        border-bottom: 3px solid transparent;
+        font-weight: 600;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+    }
+
+    .search-tab.active {
+        color: #4a90e2;
+        border-bottom-color: #4a90e2;
+        background: rgba(74, 144, 226, 0.1);
+    }
+
+    .search-tab:hover {
+        color: #4a90e2;
+    }
+
+    .search-method-buttons {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .search-method-btn {
+        flex: 1;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 50px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: 500;
+        text-align: center;
+    }
+
+    .search-method-btn.active {
+        border-color: #ffc107;
+        background: rgba(255, 193, 7, 0.1);
+        color: #ffc107;
+    }
+
+    .form-group-custom {
+        margin-bottom: 25px;
+    }
+
+    .form-group-custom label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+        font-size: 0.95rem;
+    }
+
+    .form-group-custom input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+
+    .form-group-custom input:focus {
+        outline: none;
+        border-color: #4a90e2;
+        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    }
+
+    .form-group-custom input.error {
+        border-color: #dc3545;
+    }
+
+    .input-icon {
+        position: relative;
+    }
+
+    .input-icon i {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn-find {
+        flex: 1;
+        padding: 16px;
+        background: #ffc107;
+        color: #333;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-find:hover {
+        background: #ffb300;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
+    }
+
+    .btn-back {
+        padding: 16px 30px;
+        background: #333;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-back:hover {
+        background: #222;
+    }
+
+    .help-link {
+        text-align: center;
+        margin-top: 20px;
+        color: #999;
+        font-size: 0.9rem;
+    }
+
+    .help-link a {
+        color: #4a90e2;
+        text-decoration: none;
+    }
+
+    .restaurant-info-panel {
+        background: rgba(18, 15, 12, 0.95);
+        border-radius: 20px;
+        padding: 30px;
+        color: white;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+
+    .restaurant-map {
+        width: 100%;
+        height: 200px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        overflow: hidden;
+    }
+
+    .restaurant-map iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    .restaurant-info-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        color: #ffc107;
+    }
+
+    .restaurant-info-item {
+        margin-bottom: 15px;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .restaurant-info-item strong {
+        color: #ffc107;
+    }
+
+    /* Status States */
+    .status-panel {
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .status-icon {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin: 0 auto 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+    }
+
+    .status-icon.success {
+        background: #ffc107;
+        color: #333;
+    }
+
+    .status-icon.error {
+        background: #dc3545;
+        color: white;
+    }
+
+    .status-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+    }
+
+    .status-title.success {
+        color: #28a745;
+    }
+
+    .status-title.error {
+        color: #dc3545;
+    }
+
+    .reservation-details {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 25px;
+        margin-top: 30px;
+        text-align: left;
+    }
+
+    .reservation-details h4 {
+        margin-bottom: 20px;
+        color: #333;
+        font-weight: 700;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label {
+        font-weight: 600;
+        color: #666;
+    }
+
+    .detail-value {
+        color: #333;
+        font-weight: 500;
+    }
+
+    .status-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+
+    .status-actions .btn {
+        flex: 1;
+        min-width: 150px;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-view-details {
+        background: #ffc107;
+        color: #333;
+    }
+
+    .btn-view-details:hover {
+        background: #ffb300;
+    }
+
+    .btn-secondary-action {
+        background: #333;
+        color: white;
+    }
+
+    .btn-secondary-action:hover {
+        background: #222;
+    }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 1.1rem;
+        margin-top: 20px;
+        line-height: 1.6;
+    }
+
+    .search-section {
+        display: none;
+    }
+
+    .search-section.active {
+        display: block;
+    }
+
+    <text>@@media (max-width: 992px) {
+        .check-reservation-content {
+            grid-template-columns: 1fr;
+        }
+
+        .restaurant-info-panel {
+            margin-top: 30px;
+        }
+
+        .check-reservation-title h1 {
+            font-size: 2.5rem;
+        }
+    }</text>
+</style>
+
+<div class="check-reservation-page">
+    <div class="check-reservation-container">
+        <div class="check-reservation-title">
+            <h1>CHECK YOUR RESERVATION</h1>
+            <p>Enter your information below</p>
+        </div>
+
+        <div class="check-reservation-content">
+            <!-- Main Form/Status Panel -->
+            <div class="reservation-form-panel">
+                @if (status == "form" || status == "notfound")
+                {
+                    <!-- Search Tabs -->
+                    <div class="search-tabs">
+                        <button class="search-tab @(searchType == "email" ? "active" : "")" data-tab="email">CHECK EMAIL</button>
+                        <button class="search-tab @(searchType == "phone" ? "active" : "")" data-tab="phone">BY PHONE</button>
+                        <button class="search-tab @(searchType == "code" ? "active" : "")" data-tab="code">BY CODE</button>
+                    </div>
+
+                    @if (status == "notfound")
+                    {
+                        <!-- Not Found State -->
+                        <div class="status-panel">
+                            <div class="status-icon error">
+                                <i class="fas fa-times"></i>
+                            </div>
+                            <h2 class="status-title error">RESERVATION NOT FOUND</h2>
+                            <p class="error-message">
+                                Không tìm thấy đặt bàn nào khớp với thông tin đã nhập. Vui lòng kiểm tra lại thông tin hoặc thử cách tìm kiếm khác.
+                            </p>
+                            <div class="status-actions">
+                                <button class="btn btn-secondary-action" onclick="resetForm()">Try Again</button>
+                                <button class="btn btn-secondary-action" onclick="switchTab('email')">Search by Email</button>
+                                <button class="btn btn-secondary-action" onclick="switchTab('code')">Search by Code</button>
+                                <a href="/Home/Contact" class="btn btn-secondary-action">Contact Restaurant</a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- Search Form -->
+                        <form method="post" asp-action="Check" id="checkForm">
+                            <input type="hidden" name="searchType" id="searchType" value="@searchType" />
+
+                            <!-- Search Method Buttons (for Phone tab) -->
+                            <div class="search-method-buttons" id="phoneMethodButtons" style="display: none;">
+                                <button type="button" class="search-method-btn active" data-method="phone">Tìm theo Email</button>
+                                <button type="button" class="search-method-btn" data-method="code">Tìm theo Mã đặt bàn</button>
+                            </div>
+
+                            <!-- Email Search Section -->
+                            <div class="search-section @(searchType == "email" ? "active" : "")" id="emailSection">
+                                <div class="form-group-custom">
+                                    <label for="email">Email Address *</label>
+                                    <div class="input-icon">
+                                        <input type="email" id="email" name="email" class="@(hasError && searchType == "email" ? "error" : "")" 
+                                               value="@ViewBag.SearchEmail" placeholder="Nhập email của bạn" required>
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    @if (hasError && searchType == "email")
+                                    {
+                                        <span class="text-danger" style="font-size: 0.85rem; margin-top: 5px; display: block;">Vui lòng nhập email hợp lệ</span>
+                                    }
+                                </div>
+                            </div>
+
+                            <!-- Phone Search Section -->
+                            <div class="search-section @(searchType == "phone" ? "active" : "")" id="phoneSection">
+                                <div class="form-group-custom">
+                                    <label for="phone">Số điện thoại *</label>
+                                    <div class="input-icon">
+                                        <input type="tel" id="phone" name="phone" class="@(hasError && searchType == "phone" ? "error" : "")" 
+                                               value="@ViewBag.SearchPhone" placeholder="01237889">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    @if (hasError && searchType == "phone" && string.IsNullOrEmpty(ViewBag.SearchPhone?.ToString()))
+                                    {
+                                        <span class="text-danger" style="font-size: 0.85rem; margin-top: 5px; display: block;">Vui lòng nhập số điện thoại</span>
+                                    }
+                                </div>
+                                <div class="form-group-custom">
+                                    <label for="customerName">Tên của bạn *</label>
+                                    <div class="input-icon">
+                                        <input type="text" id="customerName" name="customerName" class="@(hasError && searchType == "phone" ? "error" : "")" 
+                                               value="@ViewBag.SearchName" placeholder="Nguyễn Văn A">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    @if (hasError && searchType == "phone" && string.IsNullOrEmpty(ViewBag.SearchName?.ToString()))
+                                    {
+                                        <span class="text-danger" style="font-size: 0.85rem; margin-top: 5px; display: block;">Vui lòng nhập tên của bạn</span>
+                                    }
+                                </div>
+                            </div>
+
+                            <!-- Code Search Section -->
+                            <div class="search-section @(searchType == "code" ? "active" : "")" id="codeSection">
+                                <div class="form-group-custom">
+                                    <label for="bookingId">Mã đặt bàn (Reservation ID) *</label>
+                                    <div class="input-icon">
+                                        <input type="number" id="bookingId" name="bookingId" class="@(hasError && searchType == "code" ? "error" : "")" 
+                                               value="@ViewBag.SearchId" placeholder="Nhập mã đặt bàn">
+                                        <i class="fas fa-hashtag"></i>
+                                    </div>
+                                    @if (hasError && searchType == "code")
+                                    {
+                                        <span class="text-danger" style="font-size: 0.85rem; margin-top: 5px; display: block;">Vui lòng nhập mã đặt bàn</span>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn-find">Find Reservation</button>
+                                <button type="button" class="btn-back" onclick="window.location.href='/Booking'">Back</button>
+                            </div>
+
+                            <div class="help-link">
+                                <a href="#">Forgot your confirmation code?</a>
+                            </div>
+                        </form>
+                    }
+                }
+                else if (status == "found" && bookings.Any())
+                {
+                    <!-- Found State - Show First Booking -->
+                    var booking = bookings.First();
+                    <div class="status-panel">
+                        <div class="status-icon success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h2 class="status-title success">RESERVATION CONFIRMED</h2>
+                        
+                        <div class="reservation-details">
+                            <h4>Thông tin đặt bàn đã được xác nhận</h4>
+                            <div class="detail-row">
+                                <span class="detail-label">ID Code:</span>
+                                <span class="detail-value">#@booking.Id.ToString().PadLeft(6, '0')</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Name:</span>
+                                <span class="detail-value">@booking.CustomerName</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Email:</span>
+                                <span class="detail-value">@booking.Email</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Date:</span>
+                                <span class="detail-value">@booking.BookingDate.ToString("dd/MM/yyyy")</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Time:</span>
+                                <span class="detail-value">@booking.BookingTime.ToString("HH:mm")</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Party Size:</span>
+                                <span class="detail-value">@booking.PartySize người</span>
+                            </div>
+                            @if (!string.IsNullOrEmpty(booking.SpecialRequests))
+                            {
+                                <div class="detail-row">
+                                    <span class="detail-label">Special Requests:</span>
+                                    <span class="detail-value">@booking.SpecialRequests</span>
+                                </div>
+                            }
+                        </div>
+
+                        <p style="margin-top: 20px; color: #666; font-size: 0.95rem;">
+                            Vui lòng đến đúng giờ và đúng địa điểm đã đặt
+                        </p>
+
+                        <div class="status-actions">
+                            <a href="@Url.Action("Details", new { id = booking.Id })" class="btn btn-view-details">View Details</a>
+                            <button class="btn btn-secondary-action" onclick="sendEmailConfirmation(@booking.Id)">Send Email Confirmation</button>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Restaurant Info Panel -->
+            <div class="restaurant-info-panel">
+                <div class="restaurant-map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.126!2d106.6297!3d10.8231!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDQ5JzIzLjEiTiAxMDbCsDM3JzQ2LjkiRQ!5e0!3m2!1sen!2s!4v1234567890" 
+                            allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                
+                <h3 class="restaurant-info-title">RESTAURANT INFORMATION</h3>
+                
+                <div class="restaurant-info-item">
+                    <strong>Address:</strong> 123 Đường Nguyễn Huệ, Quận 1, TP.HCM
+                </div>
+                
+                <div class="restaurant-info-item">
+                    <strong>Hours:</strong> Mon-Sun | 10:00 AM - 10:00 PM
+                </div>
+                
+                <div class="restaurant-info-item">
+                    <strong>Website:</strong> www.restaurantly.com
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.search-tab');
+    const sections = document.querySelectorAll('.search-section');
+    const searchTypeInput = document.getElementById('searchType');
+    const phoneMethodButtons = document.getElementById('phoneMethodButtons');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabType = this.dataset.tab;
+            switchTab(tabType);
+        });
+    });
+
+    function switchTab(tabType) {
+        // Update tabs
+        tabs.forEach(t => t.classList.remove('active'));
+        document.querySelector(`[data-tab="${tabType}"]`).classList.add('active');
+        
+        // Update sections
+        sections.forEach(s => s.classList.remove('active'));
+        document.getElementById(`${tabType}Section`).classList.add('active');
+        
+        // Update hidden input
+        searchTypeInput.value = tabType;
+        
+        // Show/hide phone method buttons
+        if (tabType === 'phone') {
+            phoneMethodButtons.style.display = 'flex';
+        } else {
+            phoneMethodButtons.style.display = 'none';
+        }
+    }
+
+    // Phone method buttons
+    const methodButtons = document.querySelectorAll('.search-method-btn');
+    methodButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            methodButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const method = this.dataset.method;
+            if (method === 'code') {
+                switchTab('code');
+            } else {
+                switchTab('phone');
+            }
+        });
+    });
+});
+
+function resetForm() {
+    window.location.href = '@Url.Action("Check")';
+}
+
+function switchTab(tabType) {
+    const tabs = document.querySelectorAll('.search-tab');
+    const sections = document.querySelectorAll('.search-section');
+    const searchTypeInput = document.getElementById('searchType');
+    const phoneMethodButtons = document.getElementById('phoneMethodButtons');
+
+    tabs.forEach(t => t.classList.remove('active'));
+    document.querySelector(`[data-tab="${tabType}"]`).classList.add('active');
+    
+    sections.forEach(s => s.classList.remove('active'));
+    document.getElementById(`${tabType}Section`).classList.add('active');
+    
+    searchTypeInput.value = tabType;
+    
+    if (tabType === 'phone') {
+        phoneMethodButtons.style.display = 'flex';
+    } else {
+        phoneMethodButtons.style.display = 'none';
+    }
+}
+
+function sendEmailConfirmation(bookingId) {
+    // Implement email sending functionality
+    alert('Email confirmation sẽ được gửi đến email của bạn!');
+}
+</script>

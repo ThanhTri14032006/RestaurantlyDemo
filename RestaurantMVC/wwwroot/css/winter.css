@@ -1,0 +1,47 @@
+/* Winter-themed footer styles */
+.winter-footer {
+  color: #e6f2ff;
+  background:
+    radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px) 0 0/24px 24px,
+    radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px) 12px 12px/24px 24px,
+    linear-gradient(180deg, #0d1b2a 0%, #1b263b 60%, #415a77 100%);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+}
+
+.winter-footer h5,
+.winter-footer h6 { color: #cfe8ff; }
+
+.winter-footer .footer-social { transition: color 0.3s ease, transform 0.3s ease; }
+.winter-footer .footer-social:hover { color: #9bd3ff !important; transform: translateY(-2px); }
+
+.winter-footer .footer-link { transition: color 0.3s ease; padding: 2px 0; display: inline-block; }
+.winter-footer .footer-link:hover { color: #9bd3ff !important; }
+
+/* Adjust badges for winter palette */
+.winter-footer .badge.bg-success { background-color: #79c2ff !important; color: #09243a; }
+.winter-footer .badge.bg-primary { background-color: #5aa9e6 !important; }
+
+/* Newsletter button in icy blue */
+.winter-footer .btn.btn-warning {
+  background-color: #7fd1ff;
+  border-color: #7fd1ff;
+  color: #0b1f33;
+}
+.winter-footer .btn.btn-warning:hover { background-color: #9bdcff; border-color: #9bdcff; }
+
+.winter-footer hr { border-color: #4b6b87; opacity: 0.5; }
+
+.winter-footer .contact-info p { margin-bottom: 0.5rem; }
+
+/* Subtle frosted panel effect for columns */
+.winter-footer .col-lg-3, .winter-footer .col-md-6 {
+  backdrop-filter: blur(4px);
+}
+
+/* Responsive spacing tweaks */
+@media (max-width: 991px) {
+  .winter-footer { padding-top: 3rem; padding-bottom: 3rem; }
+}
+
+/* (Removed) Christmas header lights styles */

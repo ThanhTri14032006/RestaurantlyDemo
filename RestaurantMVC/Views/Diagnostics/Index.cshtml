@@ -1,0 +1,66 @@
+@model RestaurantMVC.Models.DbInfoViewModel
+
+<div class="container"
+    style="max-width: 900px; margin: 24px auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;">
+    <h2>Trạng thái kết nối CSDL</h2>
+
+    <div style="padding:12px; border:1px solid #e0e0e0; border-radius:8px; background:#fafafa; margin-bottom:16px;">
+        <p><strong>Trạng thái:</strong> @Model.Status @(Model.CanConnect ? "(CanConnect=true)" : "(CanConnect=false)")
+        </p>
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <p style="color:#d32f2f"><strong>Lỗi:</strong> @Model.ErrorMessage</p>
+        }
+        <p><strong>Provider:</strong> @Model.Provider</p>
+        <p><strong>Database:</strong> @Model.DatabaseName</p>
+        <p><strong>ConnectionString:</strong> <code>@Model.ConnectionString</code></p>
+        <p><strong>USE_SQLSERVER:</strong> <code>@Model.UseSqlServerEnv</code> |
+            <strong>ASPNETCORE_ENVIRONMENT:</strong> <code>@Model.AspNetCoreEnv</code></p>
+    </div>
+
+    <h3>Thống kê nhanh</h3>
+    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <div style="flex:1 1 280px; padding:12px; border:1px solid #e0e0e0; border-radius:8px;">
+            <p><strong>Users:</strong> @Model.UsersCount</p>
+            <p><strong>Menu Items:</strong> @Model.MenuItemsCount</p>
+        </div>
+        <div style="flex:1 1 280px; padding:12px; border:1px solid #e0e0e0; border-radius:8px;">
+            <p><strong>Bookings:</strong> @Model.BookingsCount</p>
+            <p><strong>Reviews:</strong> @Model.ReviewsCount</p>
+        </div>
+        <div style="flex:1 1 280px; padding:12px; border:1px solid #e0e0e0; border-radius:8px;">
+            <p><strong>Orders:</strong> @Model.OrdersCount</p>
+            <p><strong>Order Items:</strong> @Model.OrderItemsCount</p>
+        </div>
+    </div>
+
+    <h3 style="margin-top:16px;">5 đặt bàn mới nhất</h3>
+    <table class="table" style="width:100%; border-collapse:collapse;">
+        <thead>
+            <tr style="text-align:left; border-bottom:1px solid #e0e0e0;">
+                <th style="padding:8px;">Id</th>
+                <th style="padding:8px;">Khách hàng</th>
+                <th style="padding:8px;">Email</th>
+                <th style="padding:8px;">Ngày tạo</th>
+                <th style="padding:8px;">Số người</th>
+                <th style="padding:8px;">Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var b in Model.RecentBookings)
+            {
+                <tr style="border-bottom:1px solid #f0f0f0;">
+                    <td style="padding:8px;">@b.Id</td>
+                    <td style="padding:8px;">@b.CustomerName</td>
+                    <td style="padding:8px;">@b.Email</td>
+                    <td style="padding:8px;">@b.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td style="padding:8px;">@b.PartySize</td>
+                    <td style="padding:8px;">@b.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p style="margin-top:12px; color:#666;">Trang này chỉ dùng để kiểm tra nhanh việc kết nối tới SQL Server và so khớp
+        dữ liệu thực tế trên hệ thống.</p>
+</div>

@@ -1,0 +1,206 @@
+@model IEnumerable<RestaurantMVC.Models.Review>
+@{
+    ViewData["Title"] = "/Admin/Reviews";
+    Layout = "_AdminLayout";
+}
+
+<div class="admin-page">
+    <div class="admin-content container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Quản lý Đánh giá</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Filter Form -->
+                    <form method="get" class="mb-4">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <select name="rating" class="form-select">
+                                    <option value="">Tất cả đánh giá</option>
+                                    <option value="5" selected="@(ViewBag.SelectedRating == "5")">5 sao</option>
+                                    <option value="4" selected="@(ViewBag.SelectedRating == "4")">4 sao</option>
+                                    <option value="3" selected="@(ViewBag.SelectedRating == "3")">3 sao</option>
+                                    <option value="2" selected="@(ViewBag.SelectedRating == "2")">2 sao</option>
+                                    <option value="1" selected="@(ViewBag.SelectedRating == "1")">1 sao</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="isApproved" class="form-select">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option value="true" selected="@(ViewBag.SelectedApproved == "true")">Đã duyệt</option>
+                                    <option value="false" selected="@(ViewBag.SelectedApproved == "false")">Chưa duyệt</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="date" name="fromDate" class="form-control" value="@ViewBag.FromDate" />
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary">Lọc</button>
+                                <a href="@Url.Action("Reviews")" class="btn btn-secondary">Xóa lọc</a>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Reviews Table -->
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Khách hàng</th>
+                                    <th>Đánh giá</th>
+                                    <th>Nội dung</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Any())
+                                {
+                                    @foreach (var review in Model)
+                                    {
+                                        <tr>
+                                            <td>@review.Id</td>
+                                            <td>
+                                                <div>
+                                                    <strong>@review.CustomerName</strong><br>
+                                                    <small class="text-muted">@review.Email</small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="rating">
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        <i class="fas fa-star @(i <= review.Rating ? "text-warning" : "text-muted")"></i>
+                                                    }
+                                                    <span class="ms-1">(@review.Rating/5)</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="max-width: 300px;">
+                                                    @if (review.Comment.Length > 100)
+                                                    {
+                                                        <span>@review.Comment.Substring(0, 100)...</span>
+                                                        <button class="btn btn-link btn-sm p-0" onclick="toggleFullComment(@review.Id)">Xem thêm</button>
+                                                        <div id="fullComment_@review.Id" style="display: none;">
+                                                            @review.Comment
+                                                            <button class="btn btn-link btn-sm p-0" onclick="toggleFullComment(@review.Id)">Thu gọn</button>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        @review.Comment
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>@review.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                            <td>
+                                                @if (review.IsApproved)
+                                                {
+                                                    <span class="badge bg-success">Đã duyệt</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-warning">Chưa duyệt</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    @if (!review.IsApproved)
+                                                    {
+                                                        <form method="post" action="@Url.Action("ApproveReview")" style="display: inline;">
+                                                            <input type="hidden" name="id" value="@review.Id" />
+                                                            <button type="submit" class="btn btn-success btn-sm" title="Duyệt">
+                                                                <i class="fas fa-check"></i>
+                                                            </button>
+                                                        </form>
+                                                    }
+                                                    else
+                                                    {
+                                                        <form method="post" action="@Url.Action("RejectReview")" style="display: inline;">
+                                                            <input type="hidden" name="id" value="@review.Id" />
+                                                            <button type="submit" class="btn btn-warning btn-sm" title="Bỏ duyệt">
+                                                                <i class="fas fa-times"></i>
+                                                            </button>
+                                                        </form>
+                                                    }
+                                                    <form method="post" action="@Url.Action("DeleteReview")" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa đánh giá này?')">
+                                                        <input type="hidden" name="id" value="@review.Id" />
+                                                        <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="7" class="text-center">Không có đánh giá nào.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="row mt-4">
+                        <div class="col-md-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <h5>Tổng đánh giá</h5>
+                                    <h3>@ViewBag.TotalReviews</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <h5>Đã duyệt</h5>
+                                    <h3>@ViewBag.ApprovedReviews</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <h5>Chờ duyệt</h5>
+                                    <h3>@ViewBag.PendingReviews</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <h5>Đánh giá TB</h5>
+                                    <h3>@ViewBag.AverageRating</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<script>
+function toggleFullComment(reviewId) {
+    const shortComment = document.querySelector(`#fullComment_${reviewId}`).previousElementSibling;
+    const fullComment = document.querySelector(`#fullComment_${reviewId}`);
+    
+    if (fullComment.style.display === 'none') {
+        shortComment.style.display = 'none';
+        fullComment.style.display = 'block';
+    } else {
+        shortComment.style.display = 'block';
+        fullComment.style.display = 'none';
+    }
+}
+</script>

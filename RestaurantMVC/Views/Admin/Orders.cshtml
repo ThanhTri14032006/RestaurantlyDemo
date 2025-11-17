@@ -1,0 +1,206 @@
+@model List<RestaurantMVC.Models.Order>
+@{
+    ViewData["Title"] = "/Admin/Orders";
+    Layout = "_AdminLayout";
+}
+
+<div class="admin-page">
+    <section class="admin-hero">
+        <h1 class="h2 mb-1">Quản lý Đơn hàng</h1>
+        <p class="text-muted">Theo dõi và cập nhật trạng thái đơn hàng.</p>
+    </section>
+    <div class="admin-content container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-shopping-cart me-2 text-primary"></i>
+                        Quản lý Đơn hàng
+                    </h1>
+                    <p class="text-muted mb-0">Theo dõi và cập nhật trạng thái đơn hàng</p>
+                </div>
+                <div class="page-actions">
+                    <a href="@Url.Action("Index", "Admin")" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Quay lại Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-filter me-2"></i>Bộ lọc
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <!-- Filters -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <form method="get" class="d-flex">
+                                <select name="status" class="form-select me-2">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option value="Pending" selected="@(ViewBag.SelectedStatus == "Pending")">Chờ xử lý</option>
+                                    <option value="Confirmed" selected="@(ViewBag.SelectedStatus == "Confirmed")">Đã xác nhận</option>
+                                    <option value="Preparing" selected="@(ViewBag.SelectedStatus == "Preparing")">Đang chuẩn bị</option>
+                                    <option value="Ready" selected="@(ViewBag.SelectedStatus == "Ready")">Sẵn sàng</option>
+                                    <option value="Delivered" selected="@(ViewBag.SelectedStatus == "Delivered")">Đã giao</option>
+                                    <option value="Cancelled" selected="@(ViewBag.SelectedStatus == "Cancelled")">Đã hủy</option>
+                                </select>
+                                <input type="date" name="date" class="form-control me-2" value="@ViewBag.SelectedDate?.ToString("yyyy-MM-dd")" />
+                                <button type="submit" class="btn btn-primary">Lọc</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Orders Table -->
+                    <div class="table-responsive">
+                        <table class="table table-hover" data-enhance="true" data-page-size="10">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Khách hàng</th>
+                                    <th>Email</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Loại</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in Model)
+                                {
+                                    <tr>
+                                        <td>@order.Id</td>
+                                        <td>@order.CustomerName</td>
+                                        <td>@order.Email</td>
+                                        <td>@order.TotalAmount.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</td>
+                                        <td>
+                                            <span class="badge bg-info">
+                                                @(order.OrderType == RestaurantMVC.Models.OrderType.Delivery ? "Giao hàng" : "Mang về")
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge @GetStatusBadgeClass(order.Status)">
+                                                @GetStatusText(order.Status)
+                                            </span>
+                                        </td>
+                                        <td>@order.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="@Url.Action("OrderDetails", new { id = order.Id })" class="btn btn-sm btn-outline-info" title="Xem chi tiết">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                        Cập nhật
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        @if (order.Status != RestaurantMVC.Models.OrderStatus.Confirmed)
+                                                        {
+                                                            <li>
+                                                                <form method="post" action="@Url.Action("UpdateOrderStatus")" class="d-inline">
+                                                                    <input type="hidden" name="id" value="@order.Id" />
+                                                                    <input type="hidden" name="status" value="Confirmed" />
+                                                                    <button type="submit" class="dropdown-item">Xác nhận</button>
+                                                                </form>
+                                                            </li>
+                                                        }
+                                                        @if (order.Status != RestaurantMVC.Models.OrderStatus.Preparing)
+                                                        {
+                                                            <li>
+                                                                <form method="post" action="@Url.Action("UpdateOrderStatus")" class="d-inline">
+                                                                    <input type="hidden" name="id" value="@order.Id" />
+                                                                    <input type="hidden" name="status" value="Preparing" />
+                                                                    <button type="submit" class="dropdown-item">Đang chuẩn bị</button>
+                                                                </form>
+                                                            </li>
+                                                        }
+                                                        @if (order.Status != RestaurantMVC.Models.OrderStatus.Ready)
+                                                        {
+                                                            <li>
+                                                                <form method="post" action="@Url.Action("UpdateOrderStatus")" class="d-inline">
+                                                                    <input type="hidden" name="id" value="@order.Id" />
+                                                                    <input type="hidden" name="status" value="Ready" />
+                                                                    <button type="submit" class="dropdown-item">Sẵn sàng</button>
+                                                                </form>
+                                                            </li>
+                                                        }
+                                                        @if (order.Status != RestaurantMVC.Models.OrderStatus.Delivered)
+                                                        {
+                                                            <li>
+                                                                <form method="post" action="@Url.Action("UpdateOrderStatus")" class="d-inline">
+                                                                    <input type="hidden" name="id" value="@order.Id" />
+                                                                    <input type="hidden" name="status" value="Delivered" />
+                                                                    <button type="submit" class="dropdown-item">Đã giao</button>
+                                                                </form>
+                                                            </li>
+                                                        }
+                                                        @if (order.Status != RestaurantMVC.Models.OrderStatus.Cancelled)
+                                                        {
+                                                            <li>
+                                                                <form method="post" action="@Url.Action("UpdateOrderStatus")" class="d-inline">
+                                                                    <input type="hidden" name="id" value="@order.Id" />
+                                                                    <input type="hidden" name="status" value="Cancelled" />
+                                                                    <button type="submit" class="dropdown-item text-danger">Hủy đơn</button>
+                                                                </form>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if (!Model.Any())
+                    {
+                        <div class="text-center py-4">
+                            <p class="text-muted">Không có đơn hàng nào.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+@functions {
+    string GetStatusBadgeClass(RestaurantMVC.Models.OrderStatus status)
+    {
+        return status switch
+        {
+            RestaurantMVC.Models.OrderStatus.Pending => "bg-warning",
+            RestaurantMVC.Models.OrderStatus.Confirmed => "bg-info",
+            RestaurantMVC.Models.OrderStatus.Preparing => "bg-primary",
+            RestaurantMVC.Models.OrderStatus.Ready => "bg-success",
+            RestaurantMVC.Models.OrderStatus.Delivered => "bg-success",
+            RestaurantMVC.Models.OrderStatus.Cancelled => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+
+    string GetStatusText(RestaurantMVC.Models.OrderStatus status)
+    {
+        return status switch
+        {
+            RestaurantMVC.Models.OrderStatus.Pending => "Chờ xử lý",
+            RestaurantMVC.Models.OrderStatus.Confirmed => "Đã xác nhận",
+            RestaurantMVC.Models.OrderStatus.Preparing => "Đang chuẩn bị",
+            RestaurantMVC.Models.OrderStatus.Ready => "Sẵn sàng",
+            RestaurantMVC.Models.OrderStatus.Delivered => "Đã giao",
+            RestaurantMVC.Models.OrderStatus.Cancelled => "Đã hủy",
+            _ => "Không xác định"
+        };
+    }
+}
